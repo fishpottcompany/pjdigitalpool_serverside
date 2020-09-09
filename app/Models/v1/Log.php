@@ -2,23 +2,21 @@
 
 namespace App\Models\v1;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class Log extends Model
 {
-    
 
-    use HasApiTokens, Notifiable;
+    use Notifiable;
 
     /**
      * The primary key associated with the table.
      *
      * @var string
      */
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'log_id';
+
 
     /**
      * The attributes that are mass assignable.
@@ -26,15 +24,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'user_id', 
-        'user_surname', 
-        'user_firstname', 
-        'user_country', 
-        'user_phone_number',
-        'user_email',
-        'password',
-        'user_scope',
-        'user_flagged',
+        'user_type', 
+        'user_id_or_phone_or_email',
+        'log_title', 
+        'log_description',
         'created_at',
         'updated_at',
     ];
@@ -45,7 +38,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'user_id_or_phone_or_email', 'remember_token',
     ];
 
     /**
