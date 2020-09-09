@@ -160,9 +160,9 @@ class UserController extends Controller
 |--------------------------------------------------------------------------
 |
 */
+
 public function verify_reset_code(Request $request)
 {
-    echo "HERE";
     $log_controller = new LogController();
     $resetcode_controller = new ResetcodeController();
 
@@ -187,7 +187,7 @@ public function verify_reset_code(Request $request)
     $resetcode = Resetcode::where([
         'user_id' => $user->user_id,
         'user_type' => "member",
-        'resetcode' => $request->passcode,
+        'resetcode' => $request->resetcode,
         'used' => false
     ])
         ->orderBy('resetcode', 'desc')
