@@ -41,7 +41,11 @@ class UserController extends Controller
 
         $accessToken = $user->createToken("authToken", [$validatedData["user_scope"]])->accessToken;
 
-        return response(["user" => $user, "access_token" => $accessToken]);
+        return response([
+            "status" => "success",
+            "user" => $user, 
+            "access_token" => $accessToken
+            ]);
     }
 
     /*
