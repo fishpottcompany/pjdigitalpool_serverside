@@ -35,7 +35,7 @@ class UserController extends Controller
 
         $validatedData["user_scope"] = "get_dashboard";
         $validatedData["password"] = bcrypt($request->password);
-        $validatedData["user_flagged"] = false;
+        $validatedData["user_flagged"] = 0;
 
         $user = User::create($validatedData);
 
