@@ -84,11 +84,13 @@ class UserController extends Controller
 
         $log_controller->save_log("member", $request->user_phone_number, "Login|User", "Login successful");
 
-        return response([
+
+        $return = [
             "status" => 1,
-            "user" => auth()->user(),
+            "user" => auth()->user(), 
             "access_token" => $accessToken
-        ]);
+        ];
+        return response()->json($return, 200);
     }
 
     /*
