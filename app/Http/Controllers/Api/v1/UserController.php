@@ -40,12 +40,16 @@ class UserController extends Controller
         $user = User::create($validatedData);
 
         $accessToken = $user->createToken("authToken", [$validatedData["user_scope"]])->accessToken;
-
-        return response([
+        
+        $return = [
             "status" => 1,
             "user" => $user, 
             "access_token" => $accessToken
-            ]);
+        ];
+        return response()->json($return, 200);
+        /*
+        return response();
+        */
     }
 
     /*
@@ -82,8 +86,7 @@ class UserController extends Controller
 
         return response([
             "status" => 1,
-            "user_firstname" => auth()->user()->user_firstname,
-            "user_surname" => auth()->user()->user_surname,
+            "user" => auth()->user(),
             "access_token" => $accessToken
         ]);
     }
