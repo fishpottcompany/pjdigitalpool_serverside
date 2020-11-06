@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Models\v1\User;
 use App\Models\v1\Audio;
+use App\Models\v1\Video;
 use App\Mail\ResetcodeMail;
 use App\Models\v1\Resetcode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -316,5 +318,106 @@ public function get_audios(Request $request)
     return response(["status" => "success", "message" => "Operation successful", "data" => $audios]);
 }
 
+
+public function add_video(Request $request)
+{
+
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "video_name" => "bail|required|max:18",
+        "video_description" => "bail|required|max:100",
+        "video_image" => "bail|required",
+        "video_mp4" => "bail|required",
+        "user_pin" => "bail|required|min:4|max:8",
+    ]);
+
+    if(!$request->hasFile('video_image')) {
+        return response(["status" => "fail", "message" => "Image not found"]);
+    }
+
+    if(!$request->hasFile('video_mp4')) {
+        return response(["status" => "fail", "message" => "Video not found"]);
+    }
+
+    if(!$request->file('video_image')->isValid()) {
+        return response(["status" => "fail", "message" => "Image not valid"]);
+    }
+
+    if(!$request->file('video_mp4')->isValid()) {
+        return response(["status" => "fail", "message" => "Video not valid"]);
+    }
+
+    $img_path = public_path() . '/uploads/images/';
+    $video_path = public_path() . '/uploads/videos/';
+
+    $img_ext = date("Y-m-d-H-i-s") . ".png";
+    $video_ext = date("Y-m-d-H-i-s") . ".mp4";
+
+    if (file_exists( $img_path . $img_ext)) {
+        return response(["status" => "fail", "message" => "Storage error. Try again later"]);
+    }
+
+    if (file_exists( $img_path . $video_ext)) {
+        return response(["status" => "fail", "message" => "Storage error. Try again later"]);
+    }
+
+    $request->file('video_image')->move($img_path, $img_ext);
+    $request->file('video_mp4')->move($video_path, $video_ext);
+
+    $video = new Video();
+    $video->video_name = $validatedData["video_name"]; 
+    $video->video_description = $validatedData["video_description"];
+    $video->video_image = "/uploads/images/" . $img_ext;
+    $video->video_mp4 = "/uploads/videos/" . $video_ext;
+    $video->user_id = auth()->user()->user_id;
+    $video->save();
+
+    return response(["status" => "success", "message" => "Video added successsfully."]);
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_videos(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+         $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $videos = DB::table('videos')
+    ->select('videos.*')
+    ->simplePaginate(50);
+
+    for ($i=0; $i < count($videos); $i++) { 
+        $videos[$i]->video_image = URL::to('/') . $videos[$i]->video_image;
+        $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $videos]);
+}
 
 }
