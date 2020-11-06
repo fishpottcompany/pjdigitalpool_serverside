@@ -25,3 +25,7 @@ Route::middleware('auth:api')->get('/v1/member/logout', 'Api\v1\UserController@l
 Route::post('/v1/member/forgot', 'Api\v1\UserController@send_password_reset_code');
 
 Route::post('/v1/member/reset', 'Api\v1\UserController@verify_reset_code');
+
+Route::middleware('auth:api')->post('/v1/admin/audio/add', 'Api\v1\UserController@add_audio');
+
+Route::middleware('auth:api')->post('/v1/admin/audio/list', 'Api\v1\UserController@get_audios');

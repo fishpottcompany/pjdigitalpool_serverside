@@ -14,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+         'App\Model' => 'App\Policies\ModelPolicy',
     ];
 
     /**
@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         Passport::tokensCan([
 
             //USER SCOPE
-            'get_dashboard' => 'Get Dashboard',
+            'do_admin_things' => 'Do Admin Things',
             //'view-currencies' => 'View currencies',
 
         ]);

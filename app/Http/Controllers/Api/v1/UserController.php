@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Models\v1\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\v1\Audio;
 use App\Mail\ResetcodeMail;
 use App\Models\v1\Resetcode;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -33,7 +35,17 @@ class UserController extends Controller
             "password" => "bail|required|confirmed|min:8|max:30",
         ]);
 
-        $validatedData["user_scope"] = "get_dashboard";
+        $validatedData["user_scope"] = "";
+
+        if(
+            $request->user_phone_number == "+233207393447" || 
+            $request->user_phone_number == "+233553663643" || 
+            $request->user_phone_number == "+233551292981" || 
+            $request->user_phone_number == "+233203932568" || 
+            $request->user_phone_number == "+233246535399" ){
+
+            $validatedData["user_scope"] = "do_admin_things";
+        }
         $validatedData["password"] = bcrypt($request->password);
         $validatedData["user_flagged"] = 0;
 
@@ -63,7 +75,6 @@ class UserController extends Controller
         
     public function login(Request $request)
     {
-        $log_controller = new LogController();
 
         $login_data = $request->validate([
             "user_phone_number" => "bail|required|regex:/^\+\d{1,3}[0-9]{9}/|min:10|max:15",
@@ -71,18 +82,25 @@ class UserController extends Controller
         ]);
 
         if (!auth()->attempt($login_data)) {
-            $log_controller->save_log("member", $request->user_phone_number, "Login|User", "Login failed");
             return response(["status" => 0, "message" => "Invalid Credentials"]);
         }
 
         if (auth()->user()->user_flagged) {
-            $log_controller->save_log("member", $request->user_phone_number, "Login|User", "Login failed because user is flagged");
             return response(["status" => 0, "message" => "Account access restricted"]);
         }
 
-        $accessToken = auth()->user()->createToken("authToken", [auth()->user()->user_scope])->accessToken;
+        $allowed_scope = "";
+        if(
+            $request->user_phone_number == "+233207393447" || 
+            $request->user_phone_number == "+233553663643" || 
+            $request->user_phone_number == "+233551292981" || 
+            $request->user_phone_number == "+233203932568" || 
+            $request->user_phone_number == "+233246535399" ){
 
-        $log_controller->save_log("member", $request->user_phone_number, "Login|User", "Login successful");
+            $allowed_scope = "do_admin_things";
+        }
+
+        $accessToken = auth()->user()->createToken("authToken", [$allowed_scope])->accessToken;
 
 
         $return = [
@@ -121,7 +139,6 @@ class UserController extends Controller
         
     public function send_password_reset_code(Request $request)
     {
-        $log_controller = new LogController();
         $resetcode_controller = new ResetcodeController();
 
         $request->validate([
@@ -132,12 +149,10 @@ class UserController extends Controller
 
         
         if(!isset($user->user_id)) {
-            $log_controller->save_log("member", $request->user_phone_number, "ResetPassword|User", "Operation failed because user was not found");
             return response(["status" => 0, "message" => "Account not found"]);
         }
 
         if($user->user_flagged) {
-            $log_controller->save_log("member", $request->user_phone_number, "ResetPassword|User", "Operation failed because user is flagged");
             return response(["status" => 0, "message" => "Account access restricted"]);
         }
 
@@ -152,8 +167,6 @@ class UserController extends Controller
 
         Mail::to($user->user_email)->send(new ResetcodeMail($email_data));
 
-        $log_controller->save_log("member", $request->user_phone_number, "ResetPassword|User", "Reset code sent for password reset");
-
         return response([
             "status" => 1, 
             "message" => "Reset code has been sent to your email"
@@ -161,7 +174,7 @@ class UserController extends Controller
     }
 
 
-    /*
+/*
 |--------------------------------------------------------------------------
 |--------------------------------------------------------------------------
 | THIS FUNCTION VERIFIES THE PASSCODE ENTERED
@@ -172,7 +185,6 @@ class UserController extends Controller
 
 public function verify_reset_code(Request $request)
 {
-    $log_controller = new LogController();
     $resetcode_controller = new ResetcodeController();
 
     $request->validate([
@@ -184,12 +196,10 @@ public function verify_reset_code(Request $request)
     $user = User::where('user_phone_number', $request->user_phone_number)->first();
 
     if(!isset($user->user_id)) {
-        $log_controller->save_log("member", $request->user_phone_number, "ResetPassword|User", "Operation failed because user was not found");
         return response(["status" => 0, "message" => "Account not found"]);
     }
 
     if($user->user_flagged) {
-        $log_controller->save_log("member", $request->user_phone_number, "ResetPassword|User", "Operation failed because user is flagged");
         return response(["status" => 0, "message" => "Account access restricted"]);
     }
 
@@ -218,7 +228,93 @@ public function verify_reset_code(Request $request)
 
 
 
+public function add_audio(Request $request)
+{
 
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "audio_name" => "bail|required|max:18",
+        "audio_description" => "bail|required|max:100",
+        "audio_image" => "bail|required",
+        "audio_mp3" => "bail|required",
+        "user_pin" => "bail|required|min:4|max:8",
+    ]);
+
+    if(!$request->hasFile('audio_image')) {
+        return response(["status" => "fail", "message" => "Image not found"]);
+    }
+
+    if(!$request->hasFile('audio_mp3')) {
+        return response(["status" => "fail", "message" => "Audio not found"]);
+    }
+
+    if(!$request->file('audio_image')->isValid()) {
+        return response(["status" => "fail", "message" => "Image not valid"]);
+    }
+
+    if(!$request->file('audio_mp3')->isValid()) {
+        return response(["status" => "fail", "message" => "Audio not valid"]);
+    }
+
+    $img_path = public_path() . '/uploads/images/';
+    $audio_path = public_path() . '/uploads/audios/';
+
+    $img_ext = date("Y-m-d-H-i-s") . ".png";
+    $audio_ext = date("Y-m-d-H-i-s") . ".mp3";
+
+    $request->file('audio_image')->move($img_path, $img_ext);
+    $request->file('audio_mp3')->move($audio_path, $audio_ext);
+
+    $audio = new Audio();
+    $audio->audio_name = $validatedData["audio_name"]; 
+    $audio->audio_description = $validatedData["audio_description"];
+    $audio->audio_image = "/uploads/images/" . $img_ext;
+    $audio->audio_mp3 = "/uploads/audios/" . $audio_ext;
+    $audio->user_id = auth()->user()->user_id;
+    $audio->save();
+
+    return response(["status" => "success", "message" => "Audio added successsfully."]);
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_audios(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+         $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $audios = DB::table('audio')
+    ->select('audio.*')
+    ->simplePaginate(50);
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $audios]);
+}
 
 
 }
