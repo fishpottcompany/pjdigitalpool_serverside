@@ -314,7 +314,7 @@ public function get_audios(Request $request)
     $audios = DB::table('audio')
     ->select('audio.*')
     ->simplePaginate(50);
-
+ 
     for ($i=0; $i < count($audios); $i++) { 
         $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
         $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
