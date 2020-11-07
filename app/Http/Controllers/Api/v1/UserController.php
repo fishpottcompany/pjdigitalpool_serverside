@@ -316,8 +316,8 @@ public function get_audios(Request $request)
     ->simplePaginate(50);
 
     for ($i=0; $i < count($audios); $i++) { 
-        $audios[$i]->video_image = URL::to('/') . $audios[$i]->video_image;
-        $audios[$i]->video_mp4 = URL::to('/') . $audios[$i]->video_mp4;
+        $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
+        $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
     }
 
     return response(["status" => "success", "message" => "Operation successful", "data" => $audios]);
