@@ -273,7 +273,7 @@ public function add_audio(Request $request)
     $img_path = public_path() . '/uploads/images/';
     $audio_path = public_path() . '/uploads/audios/';
 
-    $img_ext = date("Y-m-d-H-i-s") . ".png";
+    $img_ext = date("Y-m-d-H-i-s") . ".jpg";
     $audio_ext = date("Y-m-d-H-i-s") . ".mp3";
 
     $request->file('audio_image')->move($img_path, $img_ext);
@@ -314,6 +314,11 @@ public function get_audios(Request $request)
     $audios = DB::table('audio')
     ->select('audio.*')
     ->simplePaginate(50);
+
+    for ($i=0; $i < count($audios); $i++) { 
+        $audios[$i]->video_image = URL::to('/') . $audios[$i]->video_image;
+        $audios[$i]->video_mp4 = URL::to('/') . $audios[$i]->video_mp4;
+    }
 
     return response(["status" => "success", "message" => "Operation successful", "data" => $audios]);
 }
@@ -362,7 +367,7 @@ public function add_video(Request $request)
     $img_path = public_path() . '/uploads/images/';
     $video_path = public_path() . '/uploads/videos/';
 
-    $img_ext = date("Y-m-d-H-i-s") . ".png";
+    $img_ext = date("Y-m-d-H-i-s") . ".jpg";
     $video_ext = date("Y-m-d-H-i-s") . ".mp4";
 
     if (file_exists( $img_path . $img_ext)) {
