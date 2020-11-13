@@ -313,6 +313,7 @@ public function get_audios(Request $request)
 
     $audios = DB::table('audio')
     ->select('audio.*')
+    ->orderBy("audio_id", "desc")
     ->simplePaginate(50);
  
     for ($i=0; $i < count($audios); $i++) { 
@@ -415,6 +416,7 @@ public function get_videos(Request $request)
 
     $videos = DB::table('videos')
     ->select('videos.*')
+    ->orderBy("video_id", "desc")
     ->simplePaginate(50);
 
     for ($i=0; $i < count($videos); $i++) { 
