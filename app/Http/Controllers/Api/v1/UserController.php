@@ -317,6 +317,9 @@ public function get_audios(Request $request)
     ->simplePaginate(50);
  
     for ($i=0; $i < count($audios); $i++) { 
+
+        $date = date_create($audios[$i]->created_at);
+        $audios[$i]->created_at = date_format($date,"M j Y");
         $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
         $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
     }
@@ -420,6 +423,8 @@ public function get_videos(Request $request)
     ->simplePaginate(50);
 
     for ($i=0; $i < count($videos); $i++) { 
+        $date = date_create($videos[$i]->created_at);
+        $videos[$i]->created_at = date_format($date,"M j Y");
         $videos[$i]->video_image = URL::to('/') . $videos[$i]->video_image;
         $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
     }
