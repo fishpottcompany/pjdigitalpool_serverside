@@ -12,7 +12,7 @@ var hostweb = "http://pjdigitalpool";
 var web_login_url = `${hostweb}/admin/login`;
 
 // DASHBOARD PAGE URL
-var web_home_url = `${hostweb}/admin/audios`;
+var web_home_url = `${hostweb}/admin/users/list`;
 
 
 
