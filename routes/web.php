@@ -14,5 +14,70 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('web/login');
 });
+
+Route::get('/admin', function () {
+    return view('web/login');
+});
+
+Route::get('/admin/login', function () {
+    return view('web/login');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| AUDIOS
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/admin/audios/add', function () {
+    return view('web/audios/add');
+});
+
+Route::get('/admin/audios/delete', function () {
+    return view('web/audios/delete');
+});
+
+/*
+|--------------------------------------------------------------------------
+| VIDEOS
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/admin/videos/add', function () {
+    return view('web/videos/add');
+});
+
+Route::get('/admin/videos/delete', function () {
+    return view('web/videos/delete');
+});
+
+/*
+|--------------------------------------------------------------------------
+| USERS
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/admin/users/list', function () {
+    return view('web/users/list');
+});
+
+/*
+|--------------------------------------------------------------------------
+| MESSAGES
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/admin/prequests/list', function () {
+    return view('web/prequests/list');
+});
+Route::get('/admin/testimonies/list', function () {
+    return view('web/testimonies/list');
+});
+Route::get('/admin/feedbacks/list', function () {
+    return view('web/feedbacks/list');
+});
+
+

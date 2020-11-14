@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Models\v1\User;
 use App\Models\v1\Audio;
 use App\Models\v1\Video;
+use App\Models\v1\Message;
 use App\Mail\ResetcodeMail;
 use App\Models\v1\Resetcode;
 use Illuminate\Http\Request;
@@ -129,6 +130,48 @@ class UserController extends Controller
         $request->user()->token()->revoke();
         return response(["status" => 1, "message" => "Logged out successfully"]);
     }
+
+
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_users(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+         $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+
+    $users_count = DB::table('users')
+    ->selectRaw('count(*)')
+    ->get();
+
+    $users_count = (array) $users_count[0];
+    $users_count = (array) $users_count["count(*)"];
+
+    $users = DB::table('users')
+    ->select('users.*')
+    ->orderBy("user_id", "desc")
+    ->simplePaginate(200);
+ 
+    for ($i=0; $i < count($users); $i++) { 
+
+        $date = date_create($users[$i]->created_at);
+        $users[$i]->created_at = date_format($date,"M j Y");
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $users, "users_count" => $users_count]);
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -328,6 +371,42 @@ public function get_audios(Request $request)
 }
 
 
+public function delete_audio(Request $request)
+{
+
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "audio_id" => "bail|required|max:18",
+        "user_pin" => "bail|required|min:4|max:8",
+    ]);
+
+    $audio = Audio::find($request->audio_id);
+
+    if(isset($audio) && $audio != null){
+    
+        unlink(".". $audio->audio_image);
+        unlink(".". $audio->audio_mp3);
+        $audio->delete();
+        return response(["status" => "success", "message" => "Audio deleted successsfully."]);
+    } else {
+        return response(["status" => "fail", "message" => "Audio not found"]);
+    }
+}
+
+
+
 public function add_video(Request $request)
 {
 
@@ -431,5 +510,221 @@ public function get_videos(Request $request)
 
     return response(["status" => "success", "message" => "Operation successful", "data" => $videos]);
 }
+
+
+
+public function delete_video(Request $request)
+{
+
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "video_id" => "bail|required|integer",
+        "user_pin" => "bail|required|min:4|max:8",
+    ]);
+
+    $video = Video::find($request->video_id);
+
+    if(isset($video) && $video != null){    
+        unlink(".". $video->video_image);
+        unlink(".". $video->video_mp4);
+        $video->delete();
+        return response(["status" => "success", "message" => "Video deleted successsfully."]);
+    } else {
+        return response(["status" => "fail", "message" => "Video not found"]);
+    }
+}
+
+
+
+public function add_message(Request $request)
+{
+
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "message_type" => "bail|required|max:50",
+        "message_text" => "bail|required|max:100",
+        "user_id" => "bail|required",
+    ]);
+
+    $message = new Message();
+    $message->message_type = $validatedData["message_type"];
+    $message->message_text = $validatedData["message_text"];
+    $message->user_id = $validatedData["user_id"];
+    $message->save();
+
+    return response(["status" => "success", "message" => "Sent successsfully."]);
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_prayer_requests(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+         $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $where_array = array(
+        ['message_type', '=',  'Prayer Request'],
+    ); 
+
+    $messages = DB::table('messages')
+    ->select('messages.*')
+    ->where($where_array)
+    ->orderBy("message_id", "desc")
+    ->simplePaginate(50);
+ 
+    for ($i=0; $i < count($messages); $i++) { 
+
+        $date = date_create($messages[$i]->created_at);
+        $messages[$i]->created_at = date_format($date,"M j Y");
+        $this_user = DB::table('users')
+        ->where("user_id", "=", $messages[$i]->user_id)
+        ->get();
+    
+        if(isset($this_user[0])){
+            $messages[$i]->user_full_name = $this_user[0]->user_firstname . " " . $this_user[0]->user_surname;
+            $messages[$i]->user_phone = $this_user[0]->user_phone_number;
+        } else {
+            $messages[$i]->user_full_name = "[Unavailable]";
+            $messages[$i]->user_phone = "[Unavailable]";
+        }
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $messages]);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_feedbacks(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+         $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $where_array = array(
+        ['message_type', '=',  'Feedback'],
+    ); 
+
+    $messages = DB::table('messages')
+    ->select('messages.*')
+    ->where($where_array)
+    ->orderBy("message_id", "desc")
+    ->simplePaginate(50);
+ 
+    for ($i=0; $i < count($messages); $i++) { 
+
+        $date = date_create($messages[$i]->created_at);
+        $messages[$i]->created_at = date_format($date,"M j Y");
+        $this_user = DB::table('users')
+        ->where("user_id", "=", $messages[$i]->user_id)
+        ->get();
+    
+        if(isset($this_user[0])){
+            $messages[$i]->user_full_name = $this_user[0]->user_firstname . " " . $this_user[0]->user_surname;
+            $messages[$i]->user_phone = $this_user[0]->user_phone_number;
+        } else {
+            $messages[$i]->user_full_name = "[Unavailable]";
+            $messages[$i]->user_phone = "[Unavailable]";
+        }
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $messages]);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_testimonies(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+         $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $where_array = array(
+        ['message_type', '=',  'Testimonies'],
+    ); 
+
+    $messages = DB::table('messages')
+    ->select('messages.*')
+    ->where($where_array)
+    ->orderBy("message_id", "desc")
+    ->simplePaginate(50);
+ 
+    for ($i=0; $i < count($messages); $i++) { 
+
+        $date = date_create($messages[$i]->created_at);
+        $messages[$i]->created_at = date_format($date,"M j Y");
+        $this_user = DB::table('users')
+        ->where("user_id", "=", $messages[$i]->user_id)
+        ->get();
+    
+        if(isset($this_user[0])){
+            $messages[$i]->user_full_name = $this_user[0]->user_firstname . " " . $this_user[0]->user_surname;
+            $messages[$i]->user_phone = $this_user[0]->user_phone_number;
+        } else {
+            $messages[$i]->user_full_name = "[Unavailable]";
+            $messages[$i]->user_phone = "[Unavailable]";
+        }
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $messages]);
+}
+
 
 }

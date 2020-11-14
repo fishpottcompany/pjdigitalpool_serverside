@@ -30,6 +30,20 @@ Route::middleware('auth:api')->post('/v1/admin/audios/add', 'Api\v1\UserControll
 
 Route::middleware('auth:api')->get('/v1/admin/audios/list', 'Api\v1\UserController@get_audios');
 
+Route::middleware('auth:api')->post('/v1/admin/audios/remove', 'Api\v1\UserController@delete_audio');
+
 Route::middleware('auth:api')->post('/v1/admin/videos/add', 'Api\v1\UserController@add_video');
 
 Route::middleware('auth:api')->get('/v1/admin/videos/list', 'Api\v1\UserController@get_videos');
+
+Route::middleware('auth:api')->post('/v1/admin/videos/remove', 'Api\v1\UserController@delete_video');
+
+Route::middleware('auth:api')->post('/v1/admin/messages/add', 'Api\v1\UserController@add_message');
+
+Route::middleware('auth:api')->get('/v1/admin/prequests/list', 'Api\v1\UserController@get_prayer_requests');
+
+Route::middleware('auth:api')->get('/v1/admin/feedbacks/list', 'Api\v1\UserController@get_feedbacks');
+
+Route::middleware('auth:api')->get('/v1/admin/testimonies/list', 'Api\v1\UserController@get_testimonies');
+
+Route::middleware('auth:api')->get('/v1/admin/users/list', 'Api\v1\UserController@get_users');
