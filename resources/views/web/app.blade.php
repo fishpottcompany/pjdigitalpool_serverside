@@ -63,6 +63,13 @@
                         <ul class="sidebar-menu" data-widget="tree"> 
                             <li  <?php if(isset($active_page) && $active_page == 'Users'){ echo 'class="active"'; } ?> ><a href="<?php echo url('/'); ?>/admin/users/list"><i class="fa fa-users"  style="color: black;"></i> <span>Users</span></a></li>
                                         
+                            <li class="treeview <?php if(isset($active_page) && $active_page == 'Articles'){ echo 'active'; } ?>">
+                                <a href="javascript:void(0)"><i class="fa fa-book" style="color: black;"></i><span>Articles</span></a>
+                                <ul class="treeview-menu">
+                                    <li><a href="<?php echo url('/'); ?>/admin/articles/add">Add</a></li>
+                                    <li><a href="<?php echo url('/'); ?>/admin/articles/delete">Delete</a></li>
+                                </ul>
+                            </li>       
                             <li class="treeview <?php if(isset($active_page) && $active_page == 'Audios'){ echo 'active'; } ?>">
                                 <a href="javascript:void(0)"><i class="fa fa-file-audio-o" style="color: black;"></i><span>Audios</span></a>
                                 <ul class="treeview-menu">

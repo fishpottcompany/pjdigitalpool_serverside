@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Models\v1\Article;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -406,6 +407,65 @@ public function delete_audio(Request $request)
 }
 
 
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_favorites(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+         $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "favorites" => "bail|required",
+    ]);
+
+    if(substr($request->favorites, -1) != "]" || substr($request->favorites, 0, 1) != "["){
+        return response(["status" => "fail", "message" => "Parameter error"]);
+    } 
+
+    $favorites_ids = substr($request->favorites,1);
+    $favorites_ids = substr($favorites_ids,0,-1);
+
+    $favorites_ids_array = explode(" ", $favorites_ids);
+
+    
+    $where_array = array(
+        ['audio_id', '=',  $favorites_ids_array[0]],
+    ); 
+
+
+    $audios = DB::table('audio')->select('audio.*')->where($where_array);
+    
+    for ($i=1; $i < count($favorites_ids_array) ; $i++) { 
+        $audios->orWhere('audio_id', '=',  $favorites_ids_array[$i]);
+    }
+    
+    $audios = $audios->orderBy("audio_id", "desc")
+    ->simplePaginate(100);
+ 
+    for ($i=0; $i < count($audios); $i++) { 
+
+        $date = date_create($audios[$i]->created_at);
+        $audios[$i]->created_at = date_format($date,"M j Y");
+        $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
+        $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $audios]);
+}
+
+
 
 public function add_video(Request $request)
 {
@@ -727,4 +787,124 @@ public function get_testimonies(Request $request)
 }
 
 
+public function add_article(Request $request)
+{
+
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "article_type" => "bail|required|max:100",
+        "article_title" => "bail|required|max:30",
+        "article_body" => "bail|required",
+        "article_image" => "bail|required",
+        "user_pin" => "bail|required|min:4|max:8",
+    ]);
+
+    if(!$request->hasFile('article_image')) {
+        return response(["status" => "fail", "message" => "Image not found"]);
+    }
+
+
+    if(!$request->file('article_image')->isValid()) {
+        return response(["status" => "fail", "message" => "Image not valid"]);
+    }
+
+    $img_path = public_path() . '/uploads/images/';
+    
+    $img_ext = uniqid() . date("Y-m-d-H-i-s") . ".jpg";
+
+    $request->file('article_image')->move($img_path, $img_ext);
+
+    $article = new Article();
+    $article->article_type = $validatedData["article_type"]; 
+    $article->article_title = $validatedData["article_title"];
+    $article->article_body = $validatedData["article_body"];
+    $article->article_title = $validatedData["article_title"];
+    $article->article_image = "/uploads/images/" . $img_ext;
+    $article->user_id = auth()->user()->user_id;
+    $article->save();
+
+    return response(["status" => "success", "message" => "Article added successsfully."]);
+
+}
+
+
+public function delete_article(Request $request)
+{
+
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "article_id" => "bail|required|max:18",
+        "user_pin" => "bail|required|min:4|max:8",
+    ]);
+
+    $article = Article::find($request->article_id);
+
+    if(isset($article) && $article != null){
+    
+        unlink(".". $article->article_image);
+        $article->delete();
+        return response(["status" => "success", "message" => "Article deleted successsfully."]);
+    } else {
+        return response(["status" => "fail", "message" => "Article not found"]);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_articles(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+         $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $articles = DB::table('articles')
+    ->select('articles.*')
+    ->orderBy("article_id", "desc")
+    ->simplePaginate(50);
+ 
+    for ($i=0; $i < count($articles); $i++) { 
+
+        $date = date_create($articles[$i]->created_at);
+        $articles[$i]->created_at = date_format($date,"M j Y");
+        $articles[$i]->article_image = URL::to('/') . $articles[$i]->article_image;
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $articles]);
+}
 }

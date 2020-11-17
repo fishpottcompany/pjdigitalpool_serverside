@@ -38,6 +38,8 @@ Route::middleware('auth:api')->get('/v1/admin/videos/list', 'Api\v1\UserControll
 
 Route::middleware('auth:api')->post('/v1/admin/videos/remove', 'Api\v1\UserController@delete_video');
 
+Route::middleware('auth:api')->post('/v1/admin/favorites/list', 'Api\v1\UserController@get_favorites');
+
 Route::middleware('auth:api')->post('/v1/admin/messages/add', 'Api\v1\UserController@add_message');
 
 Route::middleware('auth:api')->get('/v1/admin/prequests/list', 'Api\v1\UserController@get_prayer_requests');
@@ -47,3 +49,9 @@ Route::middleware('auth:api')->get('/v1/admin/feedbacks/list', 'Api\v1\UserContr
 Route::middleware('auth:api')->get('/v1/admin/testimonies/list', 'Api\v1\UserController@get_testimonies');
 
 Route::middleware('auth:api')->get('/v1/admin/users/list', 'Api\v1\UserController@get_users');
+
+Route::middleware('auth:api')->post('/v1/admin/articles/add', 'Api\v1\UserController@add_article');
+
+Route::middleware('auth:api')->post('/v1/admin/articles/remove', 'Api\v1\UserController@delete_article');
+
+Route::middleware('auth:api')->get('/v1/admin/articles/list', 'Api\v1\UserController@get_articles');

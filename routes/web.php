@@ -80,4 +80,18 @@ Route::get('/admin/feedbacks/list', function () {
     return view('web/feedbacks/list');
 });
 
+/*
+|--------------------------------------------------------------------------
+| AUDIOS
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/admin/articles/add', function () {
+    return view('web/articles/add');
+});
+
+Route::get('/admin/articles/delete', function () {
+    return view('web/articles/delete');
+});
+
 

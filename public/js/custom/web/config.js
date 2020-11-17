@@ -5,8 +5,8 @@
 ****************************************/
 var show_logging_in_console = "true"
 
-var hostweb = "http://144.202.76.74";
-//var hostweb = "http://pjdigitalpool";
+//var hostweb = "http://144.202.76.74";
+var hostweb = "http://pjdigitalpool";
 
 // LOGIN PAGE URL
 var web_login_url = `${hostweb}/admin/login`;
@@ -30,8 +30,8 @@ var web_home_url = `${hostweb}/admin/users/list`;
 
 ****************************************/
 
-var host_api = "http://144.202.76.74";
-//var host_api = "http://pjdigitalpool";
+//var host_api = "http://144.202.76.74";
+var host_api = "http://pjdigitalpool";
 
 // LOGIN API URL
 var api_admin_login_url = `${host_api}/api/v1/member/login`;
@@ -60,6 +60,11 @@ var api_prequests_list_url =  `${host_api}/api/v1/admin/prequests/list`;
 // DELETE VIDEO
 var api_users_list_url =  `${host_api}/api/v1/admin/users/list`;
 
+// ADD AUDIO
+var api_add_article_url =  `${host_api}/api/v1/admin/articles/add`;
+
+
+var api_delete_article_url =  `${host_api}/api/v1/admin/articles/remove`;
 
 
 
