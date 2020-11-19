@@ -30,7 +30,7 @@ $active_page = "Articles";
                                     <label for="article_type">Article Type</label>
                                     <select type="text" required id="article_type" name="article_type" class="form-control">
                                         <option value="HERALD OF GLORY">HERALD OF GLORY</option>
-                                        <option value="SPECIAL ARTICLES">SPECIAL ARTICLES</option>
+                                        <option value="SPECIAL ARTICLE">SPECIAL ARTICLE</option>
                                         <option value="GLORY NEWS">GLORY NEWS</option>
                                         <option value="BIBLE READING PLAN">BIBLE READING PLAN</option>
                                     </select>

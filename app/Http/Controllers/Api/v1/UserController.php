@@ -622,14 +622,14 @@ public function add_message(Request $request)
 
     $validatedData = $request->validate([
         "message_type" => "bail|required|max:50",
-        "message_text" => "bail|required|max:100",
+        "message_text" => "bail|required|max:200",
         "user_id" => "bail|required",
     ]);
 
     $message = new Message();
     $message->message_type = $validatedData["message_type"];
     $message->message_text = $validatedData["message_text"];
-    $message->user_id = $validatedData["user_id"];
+    $message->user_id = auth()->user()->user_id;
     $message->save();
 
     return response(["status" => "success", "message" => "Sent successsfully."]);
