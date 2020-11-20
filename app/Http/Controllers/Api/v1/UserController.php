@@ -623,7 +623,6 @@ public function add_message(Request $request)
     $validatedData = $request->validate([
         "message_type" => "bail|required|max:50",
         "message_text" => "bail|required|max:200",
-        "user_id" => "bail|required",
     ]);
 
     $message = new Message();
