@@ -276,7 +276,7 @@ public function verify_reset_code(Request $request)
 
 public function add_audio(Request $request)
 {
-
+/*
     if (!Auth::guard('api')->check()) {
         return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
     }
@@ -289,28 +289,53 @@ public function add_audio(Request $request)
         $request->user()->token()->revoke();
         return response(["status" => "fail", "message" => "Account access restricted"]);
     }
-
+*/
     $validatedData = $request->validate([
         "audio_name" => "bail|required|max:18",
         "audio_description" => "bail|required|max:100",
         "audio_image" => "bail|required",
         "audio_mp3" => "bail|required",
+        "user_phone_number" => "bail|required|regex:/^\+\d{1,3}[0-9]{9}/|min:10|max:15",
+        "password" => "required"
     ]);
+    
+    $login_data["user_phone_number"] = $request->user_phone_number;
+    $login_data["password"] = $request->password;
+    
+
+    if (!auth()->attempt($login_data)) {
+        return back()->with('fail','Authorization failed');
+    }
+
+    if (auth()->user()->user_flagged) {
+        return back()->with('fail','Authorization failed');
+    }
+
+    if(
+        $request->user_phone_number != "+233207393447" && 
+        $request->user_phone_number != "+233553663643" && 
+        $request->user_phone_number != "+233551292981" && 
+        $request->user_phone_number != "+233203932568" && 
+        $request->user_phone_number != "+233246535399" ){
+
+            return back()->with('fail','Authorization failed');
+    }
 
     if(!$request->hasFile('audio_image')) {
-        return response(["status" => "fail", "message" => "Image not found"]);
+        return back()->with('fail','Image not found');
     }
 
     if(!$request->hasFile('audio_mp3')) {
-        return response(["status" => "fail", "message" => "Audio not found"]);
+        return back()->with('fail','Audio not found');
+        return response(["status" => "fail", "message" => ""]);
     }
 
     if(!$request->file('audio_image')->isValid()) {
-        return response(["status" => "fail", "message" => "Image not valid"]);
+        return back()->with('fail','Image not valid');
     }
 
     if(!$request->file('audio_mp3')->isValid()) {
-        return response(["status" => "fail", "message" => "Audio not valid"]);
+        return back()->with('fail','Audio not valid');
     }
 
     $img_path = public_path() . '/uploads/images/';
@@ -330,7 +355,8 @@ public function add_audio(Request $request)
     $audio->user_id = auth()->user()->user_id;
     $audio->save();
 
-    return response(["status" => "success", "message" => "Audio added successsfully."]);
+    return back()->with('success','File has been uploaded.');
+    //return response(["status" => "success", "message" => "Audio added successsfully."]);
 
 }
 

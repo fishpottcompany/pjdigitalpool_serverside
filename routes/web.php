@@ -40,6 +40,10 @@ Route::get('/admin/audios/delete', function () {
     return view('web/audios/delete');
 });
 
+
+//Route::post('/upload-file', [UserController::class, 'add_audio'])->name('add_audio');
+Route::post('/v1/admin/audios/add', 'Api\v1\UserController@add_audio')->name('add_audio');
+
 /*
 |--------------------------------------------------------------------------
 | VIDEOS
