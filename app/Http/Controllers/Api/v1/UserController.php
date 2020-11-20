@@ -295,7 +295,6 @@ public function add_audio(Request $request)
         "audio_description" => "bail|required|max:100",
         "audio_image" => "bail|required",
         "audio_mp3" => "bail|required",
-        "user_pin" => "bail|required|min:4|max:8",
     ]);
 
     if(!$request->hasFile('audio_image')) {
