@@ -42,10 +42,6 @@ $active_page = "Audios";
                                     <label for="audio_mp3">Audio MP3</label>
                                     <input type="file" required id="audio_mp3" name="audio_mp3"   accept="audio/mpeg3" class="form-control">
                                 </div>
-                                <div class="form-group" style="display: none;">
-                                    <label for="user_pin"></label>
-                                    <input type="hidden" id="user_pin" name="user_pin" class="form-control" value="1234" readonly>
-                                </div>
                                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                             </form>
                         </div>
