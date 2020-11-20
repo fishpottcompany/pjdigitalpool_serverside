@@ -275,6 +275,9 @@ function send_file_upload_restapi_request_to_server_from_form(method, url_to_ser
         data:  form_data,
         contentType: false,
         processData: false,
+        async: true,
+        cache: false,
+        timeout: 600000,
         success: function(response){ 
             show_log_in_console(response);
 
