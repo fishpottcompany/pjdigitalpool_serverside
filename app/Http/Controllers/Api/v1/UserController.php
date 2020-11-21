@@ -11,6 +11,7 @@ use App\Models\v1\Resetcode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Models\v1\Article;
 use Illuminate\Support\Facades\Auth;
@@ -299,15 +300,18 @@ public function add_audio(Request $request)
         "password" => "required"
     ]);
     
-    $login_data["user_phone_number"] = $request->user_phone_number;
-    $login_data["password"] = $request->password;
     
+    // get user object
+    $user = User::where('user_phone_number', request()->user_phone_number)->first();
+    // do the passwords match?
 
-    if (!auth()->attempt($login_data)) {
+    if ($user == null || !Hash::check(request()->password, $user->password)) {
+        // no they don't
         return back()->with('fail','Authorization failed');
     }
 
-    if (auth()->user()->user_flagged) {
+
+    if ($user->user_flagged) {
         return back()->with('fail','Authorization failed');
     }
 
@@ -352,7 +356,7 @@ public function add_audio(Request $request)
     $audio->audio_description = $validatedData["audio_description"];
     $audio->audio_image = "/uploads/images/" . $img_ext;
     $audio->audio_mp3 = "/uploads/audios/" . $audio_ext;
-    $audio->user_id = auth()->user()->user_id;
+    $audio->user_id = $user->user_id;
     $audio->save();
 
     return back()->with('success','File has been uploaded.');
