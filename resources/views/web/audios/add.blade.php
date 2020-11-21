@@ -26,9 +26,8 @@ $active_page = "Audios";
                             <div class="d-flex justify-content-center">
                                 <div id="loader" class="customloader" style="display: none;"></div>
                             </div> 
-                            <form id="form_nope" method="POST" action="{{route('add_audio')}}"  enctype="multipart/form-data">
+                            <form id="form"  enctype="multipart/form-data">
 
-                                @csrf
                                 <div class="form-group">
                                     <label for="audio_name">Audio Title</label>
                                     <input type="text" maxlength="25" required id="audio_name" name="audio_name" class="form-control" placeholder="Enter Audio Title">
@@ -111,15 +110,4 @@ $active_page = "Audios";
 
 <!-- CUSTOMJS -->
 <script src="/js/custom/web/audios/audios.js"></script>
-
-@if ($message = Session::get('success'))
-<script>
-    show_notification("msg_holder", "success", "Success:", "{{$message}}");
-</script>
-@endif
-@if ($message = Session::get('fail'))
-<script>
-    show_notification("msg_holder", "danger", "Error:", "{{$message}}");
-</script>
-@endif
 @endsection
