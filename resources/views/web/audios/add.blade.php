@@ -1,5 +1,5 @@
 <?php
-phpinfo(); exit;
+//phpinfo(); exit;
 $active_page = "Audios";
 ?>
 <!-- INCLUDING THE FILE THAT HOLDS THE CORE STRUCTURE OF THE PAGE -->
