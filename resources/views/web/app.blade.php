@@ -63,6 +63,8 @@
                         <ul class="sidebar-menu" data-widget="tree"> 
                             <li  <?php if(isset($active_page) && $active_page == 'Users'){ echo 'class="active"'; } ?> ><a href="<?php echo url('/'); ?>/admin/users/list"><i class="fa fa-users"  style="color: black;"></i> <span>Users</span></a></li>
                                         
+                            <li  <?php if(isset($active_page) && $active_page == 'Today-Notice'){ echo 'class="active"'; } ?> ><a href="<?php echo url('/'); ?>/admin/today/notice"><i class="fa fa-bookmark"  style="color: black;"></i> <span>Today Notice</span></a></li>
+                                        
                             <li class="treeview <?php if(isset($active_page) && $active_page == 'Articles'){ echo 'active'; } ?>">
                                 <a href="javascript:void(0)"><i class="fa fa-book" style="color: black;"></i><span>Articles</span></a>
                                 <ul class="treeview-menu">

@@ -99,3 +99,13 @@ Route::get('/admin/articles/delete', function () {
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| TODAY
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/admin/today/notice', function () {
+    return view('web/today/notice');
+});
+

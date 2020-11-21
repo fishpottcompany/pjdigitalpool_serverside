@@ -5,16 +5,17 @@ namespace App\Http\Controllers\Api\v1;
 use App\Models\v1\User;
 use App\Models\v1\Audio;
 use App\Models\v1\Video;
+use App\Models\v1\Notice;
+use App\Models\v1\Article;
 use App\Models\v1\Message;
 use App\Mail\ResetcodeMail;
 use App\Models\v1\Resetcode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
-use App\Models\v1\Article;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
@@ -913,29 +914,106 @@ public function delete_article(Request $request)
 |--------------------------------------------------------------------------
 |
 */
-public function get_articles(Request $request)
+    public function get_articles(Request $request)
+    {
+        if (!Auth::guard('api')->check()) {
+            return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+        }
+
+        if (auth()->user()->user_flagged) {
+            $request->user()->token()->revoke();
+            return response(["status" => "fail", "message" => "Account access restricted"]);
+        }
+
+        $articles = DB::table('articles')
+        ->select('articles.*')
+        ->orderBy("article_id", "desc")
+        ->simplePaginate(50);
+    
+        for ($i=0; $i < count($articles); $i++) { 
+
+            $date = date_create($articles[$i]->created_at);
+            $articles[$i]->created_at = date_format($date,"M j Y");
+            $articles[$i]->article_image = URL::to('/') . $articles[$i]->article_image;
+        }
+
+        return response(["status" => "success", "message" => "Operation successful", "data" => $articles]);
+    }
+
+public function update_notice(Request $request)
+{
+
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "notice_image" => "bail|required",
+    ]);
+    
+
+    if(!$request->hasFile('notice_image')) {
+        return response(["status" => "fail", "message" => "Image not found"]);
+    }
+
+    if(!$request->file('notice_image')->isValid()) {
+        return response(["status" => "fail", "message" => "Image not valid"]);
+    }
+
+
+    $img_path = public_path() . '/uploads/images/';
+
+    $img_ext = "notice_sanctum" . ".jpg";
+
+    $request->file('notice_image')->move($img_path, $img_ext);
+
+    $notice = Notice::find(1);
+
+    if($notice != null && $notice->notice_id == 1){
+        $notice->notice_image = "/uploads/images/" . $img_ext;
+        $notice->user_id = auth()->user()->user_id;
+        $notice->save();
+    } else {
+        $notice = new Notice();
+        $notice->notice_image = "/uploads/images/" . $img_ext;
+        $notice->user_id = auth()->user()->user_id;
+        $notice->save();
+    }
+
+
+    //return back()->with('success','File has been uploaded.');
+    return response(["status" => "success", "message" => "Notice updated successsfully."]);
+
+}
+
+public function get_notices(Request $request)
 {
     if (!Auth::guard('api')->check()) {
         return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
     }
 
     if (auth()->user()->user_flagged) {
-         $request->user()->token()->revoke();
+        $request->user()->token()->revoke();
         return response(["status" => "fail", "message" => "Account access restricted"]);
     }
 
-    $articles = DB::table('articles')
-    ->select('articles.*')
-    ->orderBy("article_id", "desc")
+    $notices = DB::table('notices')
+    ->select('notices.*')
+    ->orderBy("notice_id", "desc")
     ->simplePaginate(50);
- 
-    for ($i=0; $i < count($articles); $i++) { 
 
-        $date = date_create($articles[$i]->created_at);
-        $articles[$i]->created_at = date_format($date,"M j Y");
-        $articles[$i]->article_image = URL::to('/') . $articles[$i]->article_image;
-    }
-
-    return response(["status" => "success", "message" => "Operation successful", "data" => $articles]);
+    return response(["status" => "success", "message" => "Operation successful", "data" => $notices]);
 }
+
+
+
 }
