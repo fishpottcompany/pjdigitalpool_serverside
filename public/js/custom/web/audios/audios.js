@@ -9,8 +9,8 @@ $(document).ready(function ()
         var form = $("#form");
         var form_data = new FormData(form[0]);
         var bearer = "Bearer " + localStorage.getItem("admin_access_token"); 
-        show_log_in_console("Bearer: " + bearer);
-        show_log_in_console("url: " + api_add_audio_url);
+        //show_log_in_console("Bearer: " + bearer);
+        //show_log_in_console("url: " + api_add_audio_url);
         send_file_upload_restapi_request_to_server_from_form("post", api_add_audio_url, bearer, form_data, "", add_audio_success_response_function, add_audio_error_response_function);
     });
 

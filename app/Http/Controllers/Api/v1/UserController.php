@@ -295,9 +295,7 @@ public function add_audio(Request $request)
         "audio_name" => "bail|required|max:25",
         "audio_description" => "bail|required|max:100",
         "audio_image" => "bail|required",
-        "audio_mp3" => "bail|required",
-        "user_phone_number" => "bail|required|regex:/^\+\d{1,3}[0-9]{9}/|min:10|max:15",
-        "password" => "required"
+        "audio_mp3" => "bail|required"
     ]);
     
     
