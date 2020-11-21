@@ -31,7 +31,7 @@ $active_page = "Audios";
                                 @csrf
                                 <div class="form-group">
                                     <label for="audio_name">Audio Title</label>
-                                    <input type="text" maxlength="18" required id="audio_name" name="audio_name" class="form-control" placeholder="Enter Audio Title">
+                                    <input type="text" maxlength="25" required id="audio_name" name="audio_name" class="form-control" placeholder="Enter Audio Title">
                                 </div>
                                 <div class="form-group">
                                     <label for="audio_description">Audio Description</label>
