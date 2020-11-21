@@ -28,7 +28,7 @@ $active_page = "Videos";
                             <form id="form"  enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label for="video_name">Video Title</label>
-                                    <input type="text" required id="video_name" name="video_name" class="form-control" placeholder="Enter Video Title">
+                                    <input type="text" required maxlength="18" id="video_name" name="video_name" class="form-control" placeholder="Enter Video Title">
                                 </div>
                                 <div class="form-group">
                                     <label for="video_description">Video Description</label>

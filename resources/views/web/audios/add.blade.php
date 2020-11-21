@@ -31,11 +31,11 @@ $active_page = "Audios";
                                 @csrf
                                 <div class="form-group">
                                     <label for="audio_name">Audio Title</label>
-                                    <input type="text" required id="audio_name" name="audio_name" class="form-control" placeholder="Enter Audio Title">
+                                    <input type="text" maxlength="18" required id="audio_name" name="audio_name" class="form-control" placeholder="Enter Audio Title">
                                 </div>
                                 <div class="form-group">
                                     <label for="audio_description">Audio Description</label>
-                                    <input type="text" required id="audio_description" name="audio_description" class="form-control" placeholder="Enter Audio Description">
+                                    <input type="text" maxlength="100" required id="audio_description" name="audio_description" class="form-control" placeholder="Enter Audio Description">
                                 </div>
                                 <div class="form-group">
                                     <label for="audio_image">Audio Cover Art Image</label>
@@ -47,7 +47,7 @@ $active_page = "Audios";
                                 </div>
                                 <div class="form-group">
                                     <label for="user_phone_number">Your Phone Number</label>
-                                    <input type="text" required id="user_phone_number" name="user_phone_number"  class="form-control">
+                                    <input type="text" required maxlength="15" id="user_phone_number" name="user_phone_number"  class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Your Password</label>
