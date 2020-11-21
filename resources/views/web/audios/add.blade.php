@@ -44,14 +44,6 @@ $active_page = "Audios";
                                     <label for="audio_mp3">Audio MP3</label>
                                     <input type="file" required id="audio_mp3" name="audio_mp3"   accept="audio/mpeg3" class="form-control">
                                 </div>
-                                <div class="form-group">
-                                    <label for="user_phone_number">Your Phone Number</label>
-                                    <input type="text" required maxlength="15" id="user_phone_number" name="user_phone_number"  class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Your Password</label>
-                                    <input type="password" required id="password" name="password" class="form-control">
-                                </div>
                                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
                             </form>
                         </div>
