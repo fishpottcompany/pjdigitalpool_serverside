@@ -59,11 +59,54 @@ class UserController extends Controller
 
         $accessToken = $user->createToken("authToken", [$validatedData["user_scope"]])->accessToken;
         
-        $return = [
-            "status" => 1,
-            "user" => $user, 
-            "access_token" => $accessToken
-        ];
+    $notices = DB::table('notices')
+    ->select('notices.*')
+    ->orderBy("notice_id", "desc")
+    ->simplePaginate(1);
+
+    for ($i=0; $i < count($notices); $i++) { 
+
+        $date = date_create($notices[$i]->created_at);
+        $notices[$i]->created_at = date_format($date,"M j Y");
+        $notices[$i]->notice_image = URL::to('/') . $notices[$i]->notice_image;
+    }
+
+
+    $videos = DB::table('videos')
+    ->select('videos.*')
+    ->orderBy("video_id", "desc")
+    ->simplePaginate(2);
+    
+
+    for ($i=0; $i < count($videos); $i++) { 
+        $date = date_create($videos[$i]->created_at);
+        $videos[$i]->created_at = date_format($date,"M j Y");
+        $videos[$i]->video_image = URL::to('/') . $videos[$i]->video_image;
+        $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
+    }
+
+    $audios = DB::table('audio')
+    ->select('audio.*')
+    ->orderBy("audio_id", "desc")
+    ->simplePaginate(1);
+ 
+    for ($i=0; $i < count($audios); $i++) { 
+
+        $date = date_create($audios[$i]->created_at);
+        $audios[$i]->created_at = date_format($date,"M j Y");
+        $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
+        $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
+    }
+
+    $return = [
+        "status" => 1,
+        "user" => $user, 
+        "access_token" => $accessToken, 
+        "data" => $notices,
+        "audios" => $audios,
+        "videos" => $videos
+    ];
+
         return response()->json($return, 200);
         /*
         return response();
@@ -108,11 +151,53 @@ class UserController extends Controller
 
         $accessToken = auth()->user()->createToken("authToken", [$allowed_scope])->accessToken;
 
+        $notices = DB::table('notices')
+        ->select('notices.*')
+        ->orderBy("notice_id", "desc")
+        ->simplePaginate(1);
+    
+        for ($i=0; $i < count($notices); $i++) { 
+
+            $date = date_create($notices[$i]->created_at);
+            $notices[$i]->created_at = date_format($date,"M j Y");
+            $notices[$i]->notice_image = URL::to('/') . $notices[$i]->notice_image;
+        }
+
+
+        $videos = DB::table('videos')
+        ->select('videos.*')
+        ->orderBy("video_id", "desc")
+        ->simplePaginate(2);
+        
+    
+        for ($i=0; $i < count($videos); $i++) { 
+            $date = date_create($videos[$i]->created_at);
+            $videos[$i]->created_at = date_format($date,"M j Y");
+            $videos[$i]->video_image = URL::to('/') . $videos[$i]->video_image;
+            $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
+        }
+    
+        $audios = DB::table('audio')
+        ->select('audio.*')
+        ->orderBy("audio_id", "desc")
+        ->simplePaginate(1);
+     
+        for ($i=0; $i < count($audios); $i++) { 
+    
+            $date = date_create($audios[$i]->created_at);
+            $audios[$i]->created_at = date_format($date,"M j Y");
+            $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
+            $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
+        }
+    
 
         $return = [
             "status" => 1,
             "user" => auth()->user(), 
-            "access_token" => $accessToken
+            "access_token" => $accessToken, 
+            "data" => $notices,
+            "audios" => $audios,
+            "videos" => $videos
         ];
         return response()->json($return, 200);
     }
@@ -995,7 +1080,7 @@ public function update_notice(Request $request)
 
 }
 
-public function get_notices(Request $request)
+public function get_dashboard(Request $request)
 {
     if (!Auth::guard('api')->check()) {
         return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
@@ -1009,9 +1094,44 @@ public function get_notices(Request $request)
     $notices = DB::table('notices')
     ->select('notices.*')
     ->orderBy("notice_id", "desc")
-    ->simplePaginate(50);
+    ->simplePaginate(1);
+    
+ 
+    for ($i=0; $i < count($notices); $i++) { 
 
-    return response(["status" => "success", "message" => "Operation successful", "data" => $notices]);
+        $date = date_create($notices[$i]->created_at);
+        $notices[$i]->created_at = date_format($date,"M j Y");
+        $notices[$i]->notice_image = URL::to('/') . $notices[$i]->notice_image;
+    }
+
+
+    $videos = DB::table('videos')
+    ->select('videos.*')
+    ->orderBy("video_id", "desc")
+    ->simplePaginate(2);
+    
+
+    for ($i=0; $i < count($videos); $i++) { 
+        $date = date_create($videos[$i]->created_at);
+        $videos[$i]->created_at = date_format($date,"M j Y");
+        $videos[$i]->video_image = URL::to('/') . $videos[$i]->video_image;
+        $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
+    }
+
+    $audios = DB::table('audio')
+    ->select('audio.*')
+    ->orderBy("audio_id", "desc")
+    ->simplePaginate(1);
+ 
+    for ($i=0; $i < count($audios); $i++) { 
+
+        $date = date_create($audios[$i]->created_at);
+        $audios[$i]->created_at = date_format($date,"M j Y");
+        $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
+        $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $notices, "audios" => $audios, "videos" => $videos]);
 }
 
 
