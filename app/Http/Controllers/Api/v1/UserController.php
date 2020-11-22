@@ -1057,17 +1057,25 @@ public function update_notice(Request $request)
 
     $img_path = public_path() . '/uploads/images/';
 
-    $img_ext = "notice_sanctum" . ".jpg";
+    $img_ext = uniqid() . date("Y-m-d-H-i-s") . ".jpg";
 
-    $request->file('notice_image')->move($img_path, $img_ext);
 
-    $notice = Notice::find(1);
+    //$notice = Notice::find(1);
+    $notice = DB::table('notices')
+    ->select('notices.*')
+    ->orderBy("notice_id", "desc")
+    ->get();
 
-    if($notice != null && $notice->notice_id == 1){
+    if(isset($notice[0]) && $notice[0]->notice_image != ""){ 
+
+        $request->file('notice_image')->move($img_path, $img_ext);
+        $notice = Notice::find($notice[0]->notice_id);
+        unlink(".". $notice->notice_image);
         $notice->notice_image = "/uploads/images/" . $img_ext;
         $notice->user_id = auth()->user()->user_id;
         $notice->save();
     } else {
+        $request->file('notice_image')->move($img_path, $img_ext);
         $notice = new Notice();
         $notice->notice_image = "/uploads/images/" . $img_ext;
         $notice->user_id = auth()->user()->user_id;
