@@ -59,3 +59,7 @@ Route::middleware('auth:api')->get('/v1/admin/articles/list', 'Api\v1\UserContro
 Route::middleware('auth:api')->post('/v1/admin/today/notice/add', 'Api\v1\UserController@update_notice');
 
 Route::middleware('auth:api')->get('/v1/admin/today/dasboard', 'Api\v1\UserController@get_dashboard');
+
+Route::middleware('auth:api')->post('/v1/admin/payment/idmaker', 'Api\v1\UserController@get_transaction_id');
+
+Route::middleware('auth:api')->get('/v1/admin/payment/update', 'Api\v1\UserController@update_transaction');

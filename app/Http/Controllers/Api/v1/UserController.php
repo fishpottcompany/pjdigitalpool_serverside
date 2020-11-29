@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Models\v1\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -1140,6 +1141,84 @@ public function get_dashboard(Request $request)
     }
 
     return response(["status" => "success", "message" => "Operation successful", "data" => $notices, "audios" => $audios, "videos" => $videos]);
+}
+
+/*
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| THIS FUNCTION GETS THE LIST OF ALL THE RATES
+|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------
+|
+*/
+public function get_transaction_id(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+
+    $validatedData = $request->validate([
+        "amount" => "bail|required|integer",
+        "reason" => "bail|required",
+    ]);
+
+    $ref_num = auth()->user()->user_id . uniqid() . date('ymdhis');
+    $transaction = new Transaction();
+    $transaction->transaction_ext_id = $ref_num; 
+    $transaction->amount = $validatedData["amount"];
+    $transaction->reference = $validatedData["reason"];
+    $transaction->user_id = auth()->user()->user_id;
+    $transaction->save();
+
+
+    return response([
+        "status" => "success", 
+        "message" => $ref_num, 
+        "app_user" => "app_user", 
+        "app_key" => "app_key"
+        ]);
+}
+
+
+public function update_transaction(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+    /*
+
+    $validatedData = $request->validate([
+        "amount" => "bail|required|integer",
+        "reason" => "bail|required|integer",
+    ]);
+
+    $ref_num = uniqid() . date('ymdhis');
+    $transaction = new Transaction();
+    $transaction->transaction_ext_id = $ref_num; 
+    $transaction->amount = $validatedData["amount"];
+    $transaction->reference = $validatedData["reason"];
+    $transaction->user_id = auth()->user()->user_id;
+    $transaction->save();
+
+
+    return response([
+        "status" => "success", 
+        "message" => $ref_num, 
+        "app_user" => "app_user", 
+        "app_key" => "app_key"
+        ]);
+        */
 }
 
 
