@@ -21,7 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->longText('reference');
             $table->string('payment_type', 255)->default("[not set]");
             $table->string('status', 255)->default("[not set]");
-            $table->longText('status_description')->default("[not set]");
+            $table->longText('status_description');
             $table->timestamps();
         });
         
