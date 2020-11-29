@@ -1182,7 +1182,8 @@ public function get_transaction_id(Request $request)
         "status" => "success", 
         "message" => $ref_num, 
         "app_user" => "app_user", 
-        "app_key" => "app_key"
+        "app_key" => "app_key", 
+        "merchant_id" => "merchant_id"
         ]);
 }
 
