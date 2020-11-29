@@ -1174,6 +1174,7 @@ public function get_transaction_id(Request $request)
     $transaction->amount = $validatedData["amount"];
     $transaction->reference = $validatedData["reason"];
     $transaction->user_id = auth()->user()->user_id;
+    $transaction->status_description = "[not set]"; 
     $transaction->save();
 
 
