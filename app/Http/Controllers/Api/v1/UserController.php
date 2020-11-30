@@ -1190,37 +1190,18 @@ public function get_transaction_id(Request $request)
 
 public function update_transaction(Request $request)
 {
-    if (!Auth::guard('api')->check()) {
-        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
-    }
-
-    if (auth()->user()->user_flagged) {
-        $request->user()->token()->revoke();
-        return response(["status" => "fail", "message" => "Account access restricted"]);
-    }
-    /*
-
     $validatedData = $request->validate([
-        "amount" => "bail|required|integer",
-        "reason" => "bail|required|integer",
+        "status" => "bail|required",
+        "reason" => "bail|required",
+        "transaction_id" => "bail|required",
     ]);
 
-    $ref_num = uniqid() . date('ymdhis');
-    $transaction = new Transaction();
-    $transaction->transaction_ext_id = $ref_num; 
-    $transaction->amount = $validatedData["amount"];
-    $transaction->reference = $validatedData["reason"];
-    $transaction->user_id = auth()->user()->user_id;
+    
+    $transaction = Transaction::where('transaction_ext_id', $request->transaction_id)->first();
+    $transaction->status = $request->status; 
+    $transaction->status_description = utf8_decode(urldecode($request->reason));
     $transaction->save();
 
-
-    return response([
-        "status" => "success", 
-        "message" => $ref_num, 
-        "app_user" => "app_user", 
-        "app_key" => "app_key"
-        ]);
-        */
 }
 
 
