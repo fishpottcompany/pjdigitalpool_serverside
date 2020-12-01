@@ -11,8 +11,10 @@ function get_payments_for_page_success_response_function(response)
     if(response.data.data.length > 0){
         for (let index = 0; index < response.data.data.length; index++) {
             const element = response.data.data[index];
-            if(element.message_type == "[not set]"){
+            if(element.status == "[not set]"){
                 var status = '<span class="u-label bg-warning text-white">Pending</span>';
+            } else {
+                var status = element.status ;
             }
 
             $('#table_body_list').append(
