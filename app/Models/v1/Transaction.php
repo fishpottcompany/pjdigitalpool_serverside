@@ -32,6 +32,10 @@ class Transaction extends Model
         'status',
         'status_description',
         'user_id',
+        'payer_name',
+        'payer_phone',
+        'payer_email',
+        'payer_country',
         'created_at',
         'updated_at',
     ];

@@ -20,7 +20,7 @@ $active_page = "Feedbacks";
                             <div class="col-md-12 mb-30">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h6 class="card-title">Feedbacks</h6>
+                                        <h6 class="card-title">Payments</h6>
                                         <div class="d-flex justify-content-center">
                                             <div id="loader" class="customloader"></div>
                                         </div> 
@@ -28,11 +28,17 @@ $active_page = "Feedbacks";
                                             <table id="dataTableExample"  style="display: none;" class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
-                                                        <th>Type</th>
-                                                        <th>Sent-By</th>
-                                                        <th>Message</th>
-                                                        <th>Sent-On</th>
+                                                        <th>No.</th>
+                                                        <th>Payment-ID</th>
+                                                        <th>Amount</th>
+                                                        <th>Status</th>
+                                                        <th>Reference</th>
+                                                        <th>Payer-Name</th>
+                                                        <th>Payer-Phone</th>
+                                                        <th>Payer-Email</th>
+                                                        <th>Payer-Country</th>
+                                                        <th>Payment-Type</th>
+                                                        <th>Date</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="table_body_list">

@@ -1229,6 +1229,12 @@ public function get_payments(Request $request)
 
         $date = date_create($transactions[$i]->created_at);
         $transactions[$i]->created_at = date_format($date,"M j Y");
+
+        $user = User::find($transactions[$i]->user_id);
+        $transactions[$i]->payer_name = $user->user_firstname . " " . $user->user_surname;
+        $transactions[$i]->payer_phone = $user->user_phone_number;
+        $transactions[$i]->payer_email = $user->user_email;
+        $transactions[$i]->payer_country = $user->user_country;
     }
 
     return response(["status" => "success", "message" => "Operation successful", "data" => $transactions]);

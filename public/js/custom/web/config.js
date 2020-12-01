@@ -58,6 +58,7 @@ var api_add_article_url =  `${host_api}/api/v1/admin/articles/add`;
 
 var api_delete_article_url =  `${host_api}/api/v1/admin/articles/remove`;
 
+var api_payments_list_url =  `${host_api}/api/v1/admin/payment/list`;
 
 // ADD AUDIO
 var api_update_notice_url =  `${host_api}/api/v1/admin/today/notice/add`;

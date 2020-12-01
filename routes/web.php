@@ -109,3 +109,13 @@ Route::get('/admin/today/notice', function () {
     return view('web/today/notice');
 });
 
+/*
+|--------------------------------------------------------------------------
+| PAYMENTS
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/admin/payments/list', function () {
+    return view('web/payments/list');
+});
+

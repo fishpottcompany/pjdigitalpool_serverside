@@ -5,25 +5,28 @@
 |--------------------------------------------------------------------------
 |
 */
-function get_messages_for_page_success_response_function(response)
+function get_payments_for_page_success_response_function(response)
 {
     fade_out_loader_and_fade_in_form("loader", "dataTableExample"); 
     if(response.data.data.length > 0){
         for (let index = 0; index < response.data.data.length; index++) {
             const element = response.data.data[index];
-            if(element.message_type == "Prayer Request"){
-                var status = '<span class="u-label bg-success text-white">Prayer Request</span>';
-            } else if(element.message_type == "Testimonies"){
-                var status = '<span class="u-label bg-info text-white">Testimonies</span>';
-            } else {
-                var status = '<span class="u-label bg-warning text-white">Feedback</span>';
+            if(element.message_type == "[not set]"){
+                var status = '<span class="u-label bg-warning text-white">Pending</span>';
             }
+
             $('#table_body_list').append(
                 '<tr style="cursor: ;" class="administrator">'
-                + '<td>' + element.message_id +' </td>'
+                + '<td>' + element.transaction_id +' </td>'
+                + '<td>' + element.transaction_ext_id +' </td>'
+                + '<td>Ghc' + element.amount +' </td>'
                 + '<td>' + status +' </td>'
-                + '<td>' + element.user_full_name + ' (' +  element.user_phone + ')</td>'
-                + '<td>' + element.message_text + '</td>'
+                + '<td>' + element.reference +' </td>'
+                + '<td>' + element.payer_name + '</td>'
+                + '<td>' + element.payer_phone + '</td>'
+                + '<td>' + element.payer_email + '</td>'
+                + '<td>' + element.payer_country + '</td>'
+                + '<td>' + element.payment_type + '</td>'
                 + '<td>' + element.created_at + '</td>'
                 + '</tr>'
             );
@@ -34,7 +37,7 @@ function get_messages_for_page_success_response_function(response)
     }
 }
 
-function get_messages_for_page_error_response_function(errorThrown)
+function get_payments_for_page_error_response_function(errorThrown)
 {
     show_notification("msg_holder", "danger", "Error", errorThrown);
 }
@@ -47,9 +50,9 @@ function get_messages_for_page_error_response_function(errorThrown)
 |--------------------------------------------------------------------------
 |
 */
-function get_messages_for_page(page_number)
+function get_payments_for_page(page_number)
 {
     fade_in_loader_and_fade_out_form("loader", "dataTableExample");   
     var bearer = "Bearer " + localStorage.getItem("admin_access_token"); 
-    send_restapi_request_to_server_from_form("get", api_feedbacks_list_url, bearer, "", "json", get_messages_for_page_success_response_function, get_messages_for_page_error_response_function);
+    send_restapi_request_to_server_from_form("get", api_payments_list_url, bearer, "", "json", get_payments_for_page_success_response_function, get_payments_for_page_error_response_function);
 }
