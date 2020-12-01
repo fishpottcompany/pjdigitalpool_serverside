@@ -1205,5 +1205,35 @@ public function update_transaction(Request $request)
 }
 
 
+public function get_payments(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $transactions = DB::table('transactions')
+    ->select('transactions.*')
+    ->orderBy("transaction_id", "desc")
+    ->simplePaginate(100);
+
+    for ($i=0; $i < count($transactions); $i++) { 
+
+        $date = date_create($transactions[$i]->created_at);
+        $transactions[$i]->created_at = date_format($date,"M j Y");
+        $transactions[$i]->article_image = URL::to('/') . $transactions[$i]->article_image;
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $transactions]);
+}
+
 
 }
