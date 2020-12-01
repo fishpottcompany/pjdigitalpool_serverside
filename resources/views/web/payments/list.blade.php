@@ -1,5 +1,5 @@
 <?php
-$active_page = "Feedbacks";
+$active_page = "Payments";
 ?>
 <!-- INCLUDING THE FILE THAT HOLDS THE CORE STRUCTURE OF THE PAGE -->
 @extends('web.app')
@@ -102,7 +102,7 @@ $active_page = "Feedbacks";
 <!-- CUSTOMJS -->
 <script src="/js/custom/web/payments/payments.js"></script>
 <script type="text/javascript">
-    get_messages_for_page('<?php if(isset($_GET["page"]) && intval($_GET["page"]) > 0){echo intval($_GET["page"]);} else {echo "1"; } ?>');
+    get_payments_for_page('<?php if(isset($_GET["page"]) && intval($_GET["page"]) > 0){echo intval($_GET["page"]);} else {echo "1"; } ?>');
   </script>
 
 @endsection
