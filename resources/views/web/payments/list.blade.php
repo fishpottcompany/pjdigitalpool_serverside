@@ -100,7 +100,7 @@ $active_page = "Feedbacks";
 <script src="js/default-assets/demo.datatable-init.js"></script>
 
 <!-- CUSTOMJS -->
-<script src="/js/custom/web/feedbacks/feedbacks.js"></script>
+<script src="/js/custom/web/payments/payments.js"></script>
 <script type="text/javascript">
     get_messages_for_page('<?php if(isset($_GET["page"]) && intval($_GET["page"]) > 0){echo intval($_GET["page"]);} else {echo "1"; } ?>');
   </script>
