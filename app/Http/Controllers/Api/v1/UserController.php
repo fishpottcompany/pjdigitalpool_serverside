@@ -1229,7 +1229,6 @@ public function get_payments(Request $request)
 
         $date = date_create($transactions[$i]->created_at);
         $transactions[$i]->created_at = date_format($date,"M j Y");
-        $transactions[$i]->article_image = URL::to('/') . $transactions[$i]->article_image;
     }
 
     return response(["status" => "success", "message" => "Operation successful", "data" => $transactions]);
