@@ -1181,9 +1181,9 @@ public function get_transaction_id(Request $request)
     return response([
         "status" => "success", 
         "message" => $ref_num, 
-        "app_user" => "app_user", 
-        "app_key" => "app_key", 
-        "merchant_id" => "merchant_id"
+        "app_user" => "caw5fc4efa195d0c", 
+        "app_key" => "ZTI0ZTBiMWQ5YWQxMGJmZTE3NTQ0OWE0NTg3OWRkZGU=", 
+        "merchant_id" => "TTM-00004771"
         ]);
 }
 
