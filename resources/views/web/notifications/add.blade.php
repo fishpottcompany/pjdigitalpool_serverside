@@ -32,7 +32,7 @@ $active_page = "Notification";
                                 </div>
                                 <div class="form-group">
                                     <label for="notification_message">Message</label>
-                                    <input type="text" required maxlength="25" id="notification_message" name="notification_message" class="form-control" placeholder="Type Message"/>
+                                    <input type="text" required maxlength="50" id="notification_message" name="notification_message" class="form-control" placeholder="Type Message"/>
                                 </div>
                                 <div class="form-group" style="display: none;">
                                     <label for="user_pin"></label>

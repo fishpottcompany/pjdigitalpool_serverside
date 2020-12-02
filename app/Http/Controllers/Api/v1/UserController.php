@@ -1259,12 +1259,12 @@ public function send_notification(Request $request)
 
     $validatedData = $request->validate([
         "notification_title" => "bail|required|max:20",
-        "notification_message" => "bail|required|max:25",
+        "notification_message" => "bail|required|max:50",
     ]);
 
-    $not_result = $this->send_fcm_notification($request->notification_title, $request->notification_message, "/topics/ALPHA", "ALPHA");
+    $this->send_fcm_notification($request->notification_title, $request->notification_message, "/topics/ALPHA", "ALPHA");
 
-    return response(["status" => "success", "message" => "Operation successful", "data" => $not_result]);
+    return response(["status" => "success", "message" => "Operation successful"]);
 }
 
 public function send_fcm_notification($title,$body,$target,$chid)
@@ -1298,7 +1298,7 @@ curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, true );
 curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fcmFields ) );
 $result = curl_exec($ch );
 curl_close( $ch );
-echo $result . "\n\n";
+//echo $result . "\n\n";
 
 }
 
