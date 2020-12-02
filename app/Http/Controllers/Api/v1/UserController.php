@@ -449,7 +449,7 @@ public function add_audio(Request $request)
     $audio->user_id = auth()->user()->user_id;
     $audio->save();
 
-    //return back()->with('success','File has been uploaded.');
+    $this->send_fcm_notification("New Audio Message", "Visit the Library page to listen to the new audio message", "/topics/ALPHA", "ALPHA");
     return response(["status" => "success", "message" => "Audio added successsfully."]);
 
 }
@@ -651,6 +651,7 @@ public function add_video(Request $request)
     $video->user_id = auth()->user()->user_id;
     $video->save();
 
+    $this->send_fcm_notification("New Video", "Visit the Library page to watch the new videos", "/topics/ALPHA", "ALPHA");
     return response(["status" => "success", "message" => "Video added successsfully."]);
 
 }
@@ -953,6 +954,7 @@ public function add_article(Request $request)
     $article->user_id = auth()->user()->user_id;
     $article->save();
 
+    $this->send_fcm_notification("New Articles", "Visit the Read page to read new articles", "/topics/ALPHA", "ALPHA");
     return response(["status" => "success", "message" => "Article added successsfully."]);
 
 }
@@ -1084,6 +1086,7 @@ public function update_notice(Request $request)
     }
 
 
+    $this->send_fcm_notification("New Notice", "Click to view the new notice", "/topics/ALPHA", "ALPHA");
     //return back()->with('success','File has been uploaded.');
     return response(["status" => "success", "message" => "Notice updated successsfully."]);
 
