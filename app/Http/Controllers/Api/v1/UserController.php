@@ -1241,4 +1241,66 @@ public function get_payments(Request $request)
 }
 
 
+public function send_notification(Request $request)
+{
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+
+    $validatedData = $request->validate([
+        "notification_title" => "bail|required|max:20",
+        "notification_message" => "bail|required|max:25",
+    ]);
+
+    $not_result = $this->send_fcm_notification($request->notification_title, $request->notification_message, "/topics/ALPHA", "ALPHA");
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $not_result]);
+}
+
+public function send_fcm_notification($title,$body,$target,$chid)
+   {
+
+    define( 'API_ACCESS_KEY', 'AAAABb3fzMY:APA91bFeAZ6QQwlQoiiugGLWUARoh4gf3avvcdLJNIlEWv2kBljnpOL3leahkgk4FArNuzk_ejZbE74aDjuEj1vSAWLAYKAneHJEmXhzjEZFJC3SlgfZRqNW3ZOTwlHMyuPXYh6oLwok' );
+
+  $fcmMsg = array(
+    'title' => $title,
+    'body' => $body,
+    'channelId' => $chid,
+
+  );
+  $fcmFields = array(
+    'to' => $target, //tokens sending for notification
+    'notification' => $fcmMsg,
+
+  );
+
+  $headers = array(
+    'Authorization: key=' . API_ACCESS_KEY,
+    'Content-Type: application/json'
+  );
+
+$ch = curl_init();
+curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+curl_setopt( $ch,CURLOPT_POST, true );
+curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, true );
+curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fcmFields ) );
+$result = curl_exec($ch );
+curl_close( $ch );
+echo $result . "\n\n";
+
+}
+
+
 }

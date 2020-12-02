@@ -28,11 +28,11 @@ $active_page = "Notification";
                             <form id="form" >
                                 <div class="form-group">
                                     <label for="notification_title">Title</label>
-                                    <input type="text" maxlength="30" required id="notification_title" name="notification_title" class="form-control" placeholder="Enter Title">
+                                    <input type="text" maxlength="20" required id="notification_title" name="notification_title" class="form-control" placeholder="Enter Title">
                                 </div>
                                 <div class="form-group">
                                     <label for="notification_message">Message</label>
-                                    <textarea type="text" required id="notification_message" name="notification_message" class="form-control" placeholder="Type Message"></textarea>
+                                    <input type="text" required maxlength="25" id="notification_message" name="notification_message" class="form-control" placeholder="Type Message"/>
                                 </div>
                                 <div class="form-group" style="display: none;">
                                     <label for="user_pin"></label>
