@@ -91,6 +91,9 @@
                             <li  <?php if(isset($active_page) && $active_page == 'Prayer Requests'){ echo 'class="active"'; } ?> ><a href="<?php echo url('/'); ?>/admin/prequests/list"><i class="fa fa-sign-language"  style="color: black;"></i> <span>Prayer Requests</span></a></li>
                             <li  <?php if(isset($active_page) && $active_page == 'Testimonies'){ echo 'class="active"'; } ?> ><a href="<?php echo url('/'); ?>/admin/testimonies/list"><i class="fa fa-comments"  style="color: black;"></i> <span>Testimonies</span></a></li>
                             <li  <?php if(isset($active_page) && $active_page == 'Feedbacks'){ echo 'class="active"'; } ?> ><a href="<?php echo url('/'); ?>/admin/feedbacks/list"><i class="fa fa-star"  style="color: black;"></i> <span>Feedbacks</span></a></li>
+                            <li  <?php if(isset($active_page) && $active_page == 'Notification'){ echo 'class="active"'; } ?> ><a href="<?php echo url('/'); ?>/admin/users/notifications"><i class="fa fa-cloud-upload"  style="color: black;"></i> <span>Send Notification</span></a></li>
+                                        
+                          
                         </ul>
                     </nav>
                 </div>

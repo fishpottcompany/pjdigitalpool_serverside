@@ -65,3 +65,5 @@ Route::middleware('auth:api')->post('/v1/admin/payment/idmaker', 'Api\v1\UserCon
 Route::middleware('auth:api')->get('/v1/admin/payment/update', 'Api\v1\UserController@update_transaction');
 
 Route::middleware('auth:api')->get('/v1/admin/payment/list', 'Api\v1\UserController@get_payments');
+
+Route::middleware('auth:api')->post('/v1/admin/notifications/send', 'Api\v1\UserController@send_notification');

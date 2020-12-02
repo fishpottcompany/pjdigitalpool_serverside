@@ -64,6 +64,7 @@ var api_payments_list_url =  `${host_api}/api/v1/admin/payment/list`;
 var api_update_notice_url =  `${host_api}/api/v1/admin/today/notice/add`;
 
 
+var api_add_notification_url =  `${host_api}/api/v1/admin/notifications/send`;
 
 
 

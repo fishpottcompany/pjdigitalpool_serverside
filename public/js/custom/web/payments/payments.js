@@ -35,7 +35,7 @@ function get_payments_for_page_success_response_function(response)
         }
         document.getElementById("dataTableExample").style.display = "";
     } else {
-        show_notification("msg_holder", "danger", "", "No messages found");
+        show_notification("msg_holder", "danger", "", "No payments found");
     }
 }
 

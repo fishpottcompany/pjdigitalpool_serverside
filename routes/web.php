@@ -119,3 +119,14 @@ Route::get('/admin/payments/list', function () {
     return view('web/payments/list');
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| NOTIFICATIONS
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/admin/users/notifications', function () {
+    return view('web/notifications/add');
+});
+
