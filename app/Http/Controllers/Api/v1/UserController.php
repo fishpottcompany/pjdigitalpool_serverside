@@ -1,5 +1,4 @@
 <?php
-//%sE7RbhU+,g$[.BT
 namespace App\Http\Controllers\Api\v1;
 
 use App\Models\v1\User;
@@ -19,6 +18,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
+ini_set('memory_limit','1024M');
+ini_set("upload_max_filesize","100M");
+ini_set("max_execution_time",60000); //--- 10 minutes
+ini_set("post_max_size","135M");
+ini_set("file_uploads","On");
+//sudo gedit /opt/lampp/etc/php.ini
 class UserController extends Controller
 {
 
