@@ -44,7 +44,7 @@ class UserController extends Controller
             "user_country" => "bail|required|max:55",
             "user_phone_number" => "bail|required|regex:/^\+\d{1,3}[0-9]{9}/|min:10|max:15",
             "user_email" => "bail|email|required|max:100",
-            "password" => "bail|required|confirmed|min:8|max:30",
+            "password" => "bail|required|confirmed|max:30",
         ]);
 
         $validatedData["user_scope"] = "";
