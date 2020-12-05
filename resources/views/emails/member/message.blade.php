@@ -16,7 +16,7 @@
 # User's Email
 {{ $data['user_email'] }}
 
-# User's Email
+# User's Country
 {{ $data['user_country'] }}
 
 
