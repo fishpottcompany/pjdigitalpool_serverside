@@ -758,9 +758,14 @@ public function add_message(Request $request)
     $message->save();
 
 
+        
     $email_data = array(
         'message_type' => $message->message_type,
         'message_text' => $message->message_text,
+        'user_name' => auth()->user()->user_firstname . " " . auth()->user()->user_surname,
+        'user_phone_number' => $message->user_phone_number,
+        'user_email' => $message->user_email,
+        'user_country' => $message->user_country,
         'time' => date("F j, Y, g:i a")
     );
 
