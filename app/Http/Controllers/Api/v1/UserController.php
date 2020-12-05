@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Mail\TheGloryHubMessageMail;
 use App\Models\v1\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -755,6 +756,16 @@ public function add_message(Request $request)
     $message->message_text = $validatedData["message_text"];
     $message->user_id = auth()->user()->user_id;
     $message->save();
+
+
+    $email_data = array(
+        'message_type' => $message->message_type,
+        'message_text' => $message->message_text,
+        'time' => date("F j, Y, g:i a")
+    );
+
+    Mail::to("annodankyikwaku@gmail.com")->send(new TheGloryHubMessageMail($email_data));
+    //Mail::to("media.christassembly@gmail.com")->send(new ResetcodeMail($email_data));
 
     return response(["status" => "success", "message" => "Sent successsfully."]);
 
