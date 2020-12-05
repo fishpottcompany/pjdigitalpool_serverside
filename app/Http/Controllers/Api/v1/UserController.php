@@ -763,9 +763,9 @@ public function add_message(Request $request)
         'message_type' => $message->message_type,
         'message_text' => $message->message_text,
         'user_name' => auth()->user()->user_firstname . " " . auth()->user()->user_surname,
-        'user_phone_number' => $message->user_phone_number,
-        'user_email' => $message->user_email,
-        'user_country' => $message->user_country,
+        'user_phone_number' => auth()->user()->user_phone_number,
+        'user_email' => auth()->user()->user_email,
+        'user_country' => auth()->user()->user_country,
         'time' => date("F j, Y, g:i a")
     );
 

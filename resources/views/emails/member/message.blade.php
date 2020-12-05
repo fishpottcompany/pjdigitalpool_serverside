@@ -20,6 +20,6 @@
 {{ $data['user_country'] }}
 
 
-Thanks,<br>
-{{ config('app.name') }}
+<br>
+{{ config('app.name') }} APP
 @endcomponent
