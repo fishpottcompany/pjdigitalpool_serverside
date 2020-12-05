@@ -769,8 +769,8 @@ public function add_message(Request $request)
         'time' => date("F j, Y, g:i a")
     );
 
-    Mail::to("annodankyikwaku@gmail.com")->send(new TheGloryHubMessageMail($email_data));
-    //Mail::to("media.christassembly@gmail.com")->send(new ResetcodeMail($email_data));
+    //Mail::to("media.christassembly@gmail.com")->send(new TheGloryHubMessageMail($email_data));
+    Mail::to("fishpottcompany@gmail.com")->send(new TheGloryHubMessageMail($email_data));
 
     return response(["status" => "success", "message" => "Sent successsfully."]);
 
