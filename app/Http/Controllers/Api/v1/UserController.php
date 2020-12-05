@@ -384,7 +384,7 @@ public function add_audio(Request $request)
     }
 
     $validatedData = $request->validate([
-        "audio_name" => "bail|required|max:25",
+        "audio_name" => "bail|required|max:45",
         "audio_description" => "bail|required|max:100",
         "audio_image" => "bail|required",
         "audio_mp3" => "bail|required"
@@ -608,8 +608,8 @@ public function add_video(Request $request)
     }
 
     $validatedData = $request->validate([
-        "video_name" => "bail|required|max:25",
-        "video_description" => "bail|required|max:100",
+        "video_name" => "bail|required|max:45",
+        "video_description" => "bail|required|max:1000",
         "video_image" => "bail|required",
         "video_mp4" => "bail|required",
         "user_pin" => "bail|required|min:4|max:8",
