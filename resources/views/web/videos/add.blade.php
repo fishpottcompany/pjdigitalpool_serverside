@@ -32,7 +32,7 @@ $active_page = "Videos";
                                 </div>
                                 <div class="form-group">
                                     <label for="video_description">Video Description</label>
-                                    <input type="text" required id="video_description" name="video_description" maxlength="1000" class="form-control" placeholder="Enter Video Description">
+                                    <input type="text" required id="video_description" name="video_description" class="form-control" placeholder="Enter Video Description">
                                 </div>
                                 <div class="form-group">
                                     <label for="video_image">Video Cover Art Image</label>
