@@ -34,7 +34,7 @@ $active_page = "Audios";
                                 </div>
                                 <div class="form-group">
                                     <label for="audio_description">Audio Description</label>
-                                    <input type="text" required id="audio_description" name="audio_description" class="form-control" placeholder="Enter Audio Description">
+                                    <textarea required id="audio_description" name="audio_description" class="form-control" placeholder="Enter Audio Description"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="audio_image">Audio Cover Art Image</label>
