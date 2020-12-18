@@ -69,7 +69,7 @@ class UserController extends Controller
     $notices = DB::table('notices')
     ->select('notices.*')
     ->orderBy("notice_id", "desc")
-    ->simplePaginate(1);
+    ->simplePaginate(2);
 
     for ($i=0; $i < count($notices); $i++) { 
 
@@ -161,7 +161,7 @@ class UserController extends Controller
         $notices = DB::table('notices')
         ->select('notices.*')
         ->orderBy("notice_id", "desc")
-        ->simplePaginate(1);
+        ->simplePaginate(2);
     
         for ($i=0; $i < count($notices); $i++) { 
 
@@ -1128,7 +1128,7 @@ public function get_dashboard(Request $request)
     $notices = DB::table('notices')
     ->select('notices.*')
     ->orderBy("notice_id", "desc")
-    ->simplePaginate(1);
+    ->simplePaginate(2);
     
  
     for ($i=0; $i < count($notices); $i++) { 
