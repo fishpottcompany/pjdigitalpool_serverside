@@ -1086,6 +1086,7 @@ public function update_notice(Request $request)
 
 
     //$notice = Notice::find(1);
+    /*
     $notice = DB::table('notices')
     ->select('notices.*')
     ->orderBy("notice_id", "desc")
@@ -1106,11 +1107,18 @@ public function update_notice(Request $request)
         $notice->user_id = auth()->user()->user_id;
         $notice->save();
     }
+    */
+
+    $request->file('notice_image')->move($img_path, $img_ext);
+    $notice = new Notice();
+    $notice->notice_image = "/uploads/images/" . $img_ext;
+    $notice->user_id = auth()->user()->user_id;
+    $notice->save();
 
 
     $this->send_fcm_notification("New Notice", "Click to view the new notice", "/topics/ALPHA", "ALPHA");
     //return back()->with('success','File has been uploaded.');
-    return response(["status" => "success", "message" => "Notice updated successsfully."]);
+    return response(["status" => "success", "message" => "Notice added successsfully."]);
 
 }
 
