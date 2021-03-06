@@ -130,3 +130,14 @@ Route::get('/admin/users/notifications', function () {
     return view('web/notifications/add');
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| NOTIFICATIONS
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/users/privacypolicy', function () {
+    return view('web/pp');
+});
+
