@@ -174,7 +174,7 @@ class UserController extends Controller
         $videos = DB::table('videos')
         ->select('videos.*')
         ->orderBy("video_id", "desc")
-        ->simplePaginate(2);
+        ->limit(2)->get();
         
     
         for ($i=0; $i < count($videos); $i++) { 
@@ -187,7 +187,8 @@ class UserController extends Controller
         $audios = DB::table('audio')
         ->select('audio.*')
         ->orderBy("audio_id", "desc")
-        ->simplePaginate(1);
+        ->limit(1)->get();
+
      
         for ($i=0; $i < count($audios); $i++) { 
     
