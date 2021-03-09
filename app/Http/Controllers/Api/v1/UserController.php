@@ -120,8 +120,8 @@ class UserController extends Controller
         */
         return response([
             "status" => 1, 
-            "user" => $user, 
-            "access_token" => $accessToken, 
+            "user" => $user
+            //"access_token" => $accessToken, 
             //"data" => $notices,
             //"audios" => $audios,
             //"videos" => $videos
