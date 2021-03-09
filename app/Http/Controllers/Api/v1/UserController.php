@@ -114,18 +114,20 @@ class UserController extends Controller
         "videos" => $videos
     ];
 
-        //return response()->json($return, 200);
+        return response()->json($return, 200);
         /*
         return response();
         */
+        /*
         return response([
             "status" => 1, 
-            "user" => $user
-            //"access_token" => $accessToken, 
-            //"data" => $notices,
-            //"audios" => $audios,
-            //"videos" => $videos
+            "user" => $user, 
+            "access_token" => $accessToken, 
+            "data" => $notices,
+            "audios" => $audios,
+            "videos" => $videos
         ]);
+        */
     }
 
     /*
