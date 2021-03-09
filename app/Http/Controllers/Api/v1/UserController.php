@@ -114,10 +114,18 @@ class UserController extends Controller
         "videos" => $videos
     ];
 
-        return response()->json($return, 200);
+        //return response()->json($return, 200);
         /*
         return response();
         */
+        return response([
+            "status" => 1, 
+            "user" => $user, 
+            "access_token" => $accessToken, 
+            "data" => $notices,
+            "audios" => $audios,
+            "videos" => $videos
+        ]);
     }
 
     /*
@@ -174,7 +182,7 @@ class UserController extends Controller
         $videos = DB::table('videos')
         ->select('videos.*')
         ->orderBy("video_id", "desc")
-        ->limit(2)->get();
+        ->simplePaginate(2);
         
     
         for ($i=0; $i < count($videos); $i++) { 
@@ -187,8 +195,7 @@ class UserController extends Controller
         $audios = DB::table('audio')
         ->select('audio.*')
         ->orderBy("audio_id", "desc")
-        ->limit(1)->get();
-
+        ->simplePaginate(1);
      
         for ($i=0; $i < count($audios); $i++) { 
     
@@ -207,7 +214,8 @@ class UserController extends Controller
             "audios" => $audios,
             "videos" => $videos
         ];
-        return response()->json($return, 200);
+        //return response()->json($return, 200);
+        
     }
 
     /*
