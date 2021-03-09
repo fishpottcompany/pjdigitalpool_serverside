@@ -122,9 +122,9 @@ class UserController extends Controller
             "status" => 1, 
             "user" => $user, 
             "access_token" => $accessToken, 
-            "data" => $notices,
-            "audios" => $audios,
-            "videos" => $videos
+            //"data" => $notices,
+            //"audios" => $audios,
+            //"videos" => $videos
         ]);
     }
 
