@@ -216,7 +216,7 @@ class UserController extends Controller
             "audios" => $audios,
             "videos" => $videos
         ];
-        //return response()->json($return, 200);
+        return response()->json($return, 200);
         
     }
 
