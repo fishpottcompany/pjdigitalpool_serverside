@@ -62,72 +62,84 @@ class UserController extends Controller
         $validatedData["password"] = bcrypt($request->password);
         $validatedData["user_flagged"] = 0;
 
-        $user = User::create($validatedData);
+        $user1 = User::create($validatedData);
 
-        $accessToken = $user->createToken("authToken", [$validatedData["user_scope"]])->accessToken;
+        $login_data = $request->validate([
+            "user_phone_number" => $request->user_phone_number,
+            "password" => $request->password
+        ]);
+
+        if (!auth()->attempt($login_data)) {
+            return response(["status" => 0, "message" => "Invalid Credentials"]);
+        }
+
+        if (auth()->user()->user_flagged) {
+            return response(["status" => 0, "message" => "Account access restricted"]);
+        }
+
+        $allowed_scope = "";
+        if(
+            $request->user_phone_number == "+233207393447" || 
+            $request->user_phone_number == "+233553663643" || 
+            $request->user_phone_number == "+233551292981" || 
+            $request->user_phone_number == "+233203932568" || 
+            $request->user_phone_number == "+233246535399" ){
+
+            $allowed_scope = "do_admin_things";
+        }
+
+        $accessToken = auth()->user()->createToken("authToken", [$allowed_scope])->accessToken;
+
+        $notices = DB::table('notices')
+        ->select('notices.*')
+        ->orderBy("notice_id", "desc")
+        ->simplePaginate(2);
+    
+        for ($i=0; $i < count($notices); $i++) { 
+
+            $date = date_create($notices[$i]->created_at);
+            $notices[$i]->created_at = date_format($date,"M j Y");
+            $notices[$i]->notice_image = URL::to('/') . $notices[$i]->notice_image;
+        }
+
+
+        $videos = DB::table('videos')
+        ->select('videos.*')
+        ->orderBy("video_id", "desc")
+        ->simplePaginate(2);
         
-    $notices = DB::table('notices')
-    ->select('notices.*')
-    ->orderBy("notice_id", "desc")
-    ->simplePaginate(2);
-
-    for ($i=0; $i < count($notices); $i++) { 
-
-        $date = date_create($notices[$i]->created_at);
-        $notices[$i]->created_at = date_format($date,"M j Y");
-        $notices[$i]->notice_image = URL::to('/') . $notices[$i]->notice_image;
-    }
-
-
-    $videos = DB::table('videos')
-    ->select('videos.*')
-    ->orderBy("video_id", "desc")
-    ->simplePaginate(2);
+    
+        for ($i=0; $i < count($videos); $i++) { 
+            $date = date_create($videos[$i]->created_at);
+            $videos[$i]->created_at = date_format($date,"M j Y");
+            $videos[$i]->video_image = URL::to('/') . $videos[$i]->video_image;
+            $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
+        }
+    
+        $audios = DB::table('audio')
+        ->select('audio.*')
+        ->orderBy("audio_id", "desc")
+        ->simplePaginate(1);
+     
+        for ($i=0; $i < count($audios); $i++) { 
+    
+            $date = date_create($audios[$i]->created_at);
+            $audios[$i]->created_at = date_format($date,"M j Y");
+            $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
+            $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
+        }
     
 
-    for ($i=0; $i < count($videos); $i++) { 
-        $date = date_create($videos[$i]->created_at);
-        $videos[$i]->created_at = date_format($date,"M j Y");
-        $videos[$i]->video_image = URL::to('/') . $videos[$i]->video_image;
-        $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
-    }
-
-    $audios = DB::table('audio')
-    ->select('audio.*')
-    ->orderBy("audio_id", "desc")
-    ->simplePaginate(1);
- 
-    for ($i=0; $i < count($audios); $i++) { 
-
-        $date = date_create($audios[$i]->created_at);
-        $audios[$i]->created_at = date_format($date,"M j Y");
-        $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
-        $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
-    }
-
-    $return = [
-        "status" => 1,
-        "user" => $user, 
-        "access_token" => $accessToken, 
-        "data" => $notices,
-        "audios" => $audios,
-        "videos" => $videos
-    ];
-
-        return response()->json($return, 200);
-        /*
-        return response();
-        */
-        /*
-        return response([
-            "status" => 1, 
-            "user" => $user, 
+        $return = [
+            "status" => 1,
+            "user" => auth()->user(), 
             "access_token" => $accessToken, 
             "data" => $notices,
             "audios" => $audios,
             "videos" => $videos
-        ]);
-        */
+        ];
+        return response()->json($return, 200);
+        
     }
 
     /*
