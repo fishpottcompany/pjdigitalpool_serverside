@@ -64,10 +64,9 @@ class UserController extends Controller
 
         $user1 = User::create($validatedData);
 
-        $login_data = $request->validate([
-            "user_phone_number" => $request->user_phone_number,
-            "password" => $request->password
-        ]);
+
+        $login_data["user_phone_number"] = $request->user_phone_number;
+        $login_data["password"] = $request->password;
 
         if (!auth()->attempt($login_data)) {
             return response(["status" => 0, "message" => "Invalid Credentials"]);
