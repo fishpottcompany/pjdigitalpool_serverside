@@ -40,12 +40,12 @@ class UserController extends Controller
     {
 
         $validatedData = $request->validate([
-            "user_surname" => "bail|required|max:55",
-            "user_firstname" => "bail|required|max:55",
-            "user_country" => "bail|required|max:55",
-            "user_phone_number" => "bail|required|regex:/^\+\d{1,3}[0-9]{9}/|min:10|max:15",
-            "user_email" => "bail|email|required|max:100",
-            "password" => "bail|required|confirmed|max:30",
+            "user_surname" => "bail|required",
+            "user_firstname" => "bail|required",
+            "user_country" => "bail|required",
+            "user_phone_number" => "bail|required",
+            "user_email" => "bail|required",
+            "password" => "bail|required",
         ]);
 
         $validatedData["user_scope"] = "";
