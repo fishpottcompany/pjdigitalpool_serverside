@@ -231,6 +231,86 @@ class UserController extends Controller
         
     }
 
+    public function login_guest_user(Request $request)
+    {
+
+        $login_data["user_phone_number"] = "+233302503086";
+        $login_data["password"] = "they.say123bestlollaunfuglio";
+        
+        if (!auth()->attempt($login_data)) {
+            return response(["status" => 0, "message" => "Invalid Credentials"]);
+        }
+
+        if (auth()->user()->user_flagged) {
+            return response(["status" => 0, "message" => "Account access restricted"]);
+        }
+
+        $allowed_scope = "";
+        if(
+            $request->user_phone_number == "+233207393447" || 
+            $request->user_phone_number == "+233553663643" || 
+            $request->user_phone_number == "+233551292981" || 
+            $request->user_phone_number == "+233203932568" || 
+            $request->user_phone_number == "+233246535399" ){
+
+            $allowed_scope = "do_admin_things";
+        }
+
+        $accessToken = auth()->user()->createToken("authToken", [$allowed_scope])->accessToken;
+
+        $notices = DB::table('notices')
+        ->select('notices.*')
+        ->orderBy("notice_id", "desc")
+        ->simplePaginate(2);
+    
+        for ($i=0; $i < count($notices); $i++) { 
+
+            $date = date_create($notices[$i]->created_at);
+            $notices[$i]->created_at = date_format($date,"M j Y");
+            $notices[$i]->notice_image = URL::to('/') . $notices[$i]->notice_image;
+        }
+
+
+        $videos = DB::table('videos')
+        ->select('videos.*')
+        ->orderBy("video_id", "desc")
+        ->simplePaginate(2);
+        
+    
+        for ($i=0; $i < count($videos); $i++) { 
+            $date = date_create($videos[$i]->created_at);
+            $videos[$i]->created_at = date_format($date,"M j Y");
+            $videos[$i]->video_image = URL::to('/') . $videos[$i]->video_image;
+            $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
+        }
+    
+        $audios = DB::table('audio')
+        ->select('audio.*')
+        ->orderBy("audio_id", "desc")
+        ->simplePaginate(1);
+     
+        for ($i=0; $i < count($audios); $i++) { 
+    
+            $date = date_create($audios[$i]->created_at);
+            $audios[$i]->created_at = date_format($date,"M j Y");
+            $audios[$i]->audio_image = URL::to('/') . $audios[$i]->audio_image;
+            $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
+        }
+    
+
+        $return = [
+            "status" => 1,
+            "user" => auth()->user(), 
+            "access_token" => $accessToken, 
+            "data" => $notices,
+            "audios" => $audios,
+            "videos" => $videos
+        ];
+        return response()->json($return, 200);
+        
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     |--------------------------------------------------------------------------
