@@ -20,7 +20,7 @@ Route::post('/v1/member/register', 'Api\v1\UserController@register');
 
 Route::post('/v1/member/login', 'Api\v1\UserController@login');
 
-Route::post('/v1/member/guest', 'Api\v1\UserController@login_guest_user');
+Route::get('/v1/member/guest', 'Api\v1\UserController@login_guest_user');
 
 Route::post('/v1/member/loginn', 'Api\v1\UserController@register');
 
