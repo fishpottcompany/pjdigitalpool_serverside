@@ -235,7 +235,8 @@ class UserController extends Controller
     {
 
         $login_data["user_phone_number"] = "+233302503086";
-        $login_data["password"] = "they.say123bestlollaunfuglio";
+        //$login_data["password"] = "they.say123bestlollaunfuglio";
+        $login_data["password"] = "12345678";
         
         if (!auth()->attempt($login_data)) {
             return response(["status" => 0, "message" => "Invalid Credentials"]);
