@@ -27,8 +27,8 @@ $active_page = "Articles";
                             </div> 
                             <form id="delete_form"  enctype="multipart/form-data">
                                 <div class="form-group">
-                                    <label for="article_id">Article ID</label>
-                                    <input type="number" required min="0" id="article_id" name="article_id" class="form-control" placeholder="Enter Article ID">
+                                    <label for="article_id">Article Title</label>
+                                    <input type="number" required id="article_title" name="article_title" class="form-control" placeholder="Enter Article Title">
                                 </div>
                                 <div class="form-group" style="display: none;">
                                     <label for="user_pin"></label>

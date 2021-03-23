@@ -1102,11 +1102,12 @@ public function delete_article(Request $request)
     }
 
     $validatedData = $request->validate([
-        "article_id" => "bail|required|max:18",
+        "article_title" => "bail|required|max:18",
         "user_pin" => "bail|required|min:4|max:8",
     ]);
 
-    $article = Article::find($request->article_id);
+    $article = Article::where('article_title', $request->article_title)->orderBy('created_at', 'DESC')->first();;
+    //$article = Article::find($request->article_id);
 
     if(isset($article) && $article != null){
     
