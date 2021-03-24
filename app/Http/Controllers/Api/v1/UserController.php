@@ -1118,8 +1118,9 @@ public function delete_article(Request $request)
     ->limit(1)
     ->get();
 
+    $article = Article::where('article_title', 'like', $request->article_title . '%')->get();
     var_dump($article);
-    
+
     if(isset($article) && $article != null){
     
         unlink(".". $article->article_image);
