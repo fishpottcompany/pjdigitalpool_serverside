@@ -1106,11 +1106,20 @@ public function delete_article(Request $request)
         "user_pin" => "bail|required|min:4|max:8",
     ]);
 
-    $article = Article::where('article_title', $request->article_title)->orderBy('created_at', 'DESC')->first();
 
-    var_dump($article);
+    //$article = Article::where('article_title', $request->article_title)->orderBy('created_at', 'DESC')->first();
     //$article = Article::find($request->article_id);
 
+
+    $article = DB::table('articles')
+    ->select('articles.*')
+    ->where('article_title', $request->article_title)
+    ->orderBy("created_at", "desc")
+    ->limit(1)
+    ->get();
+
+    var_dump($article);
+    
     if(isset($article) && $article != null){
     
         unlink(".". $article->article_image);
