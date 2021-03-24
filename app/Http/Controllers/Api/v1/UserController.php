@@ -1119,9 +1119,11 @@ public function delete_article(Request $request)
     ->limit(1)
     ->get();
     */
+    echo "request->article_title: " . $request->article_title . "<br><br>\n\n\n";
 
-    echo "request->article_title: " . $request->article_title;
-    $article = Article::where('article_title', 'like', $request->article_title . '%')->get();
+    $article = Article::whereRaw('article_title = ?', ["{$request->article_title}%"])->get();
+
+    //$article = Article::where('article_title', 'like', $request->article_title . '%')->get();
     var_dump($article);
 
     if(isset($article) && $article != null){
