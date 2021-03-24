@@ -1107,7 +1107,7 @@ public function delete_article(Request $request)
     ]);
 
     //$article = Article::where('article_title', $request->article_title)->orderBy('created_at', 'DESC')->first();;
-    //$article = Article::find($request->article_id);
+    $article = Article::find($request->article_id);
 
     if(isset($article) && $article != null){
     
