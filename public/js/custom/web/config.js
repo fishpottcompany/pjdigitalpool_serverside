@@ -247,6 +247,7 @@ function send_restapi_request_to_server_from_form(method, url_to_server, authori
         data:  form_data,
         dataType: data_type,
         success: function(response){ 
+            show_log_in_console("response");
             show_log_in_console(response);
 
             if(response == "Unauthorized"){
@@ -260,6 +261,7 @@ function send_restapi_request_to_server_from_form(method, url_to_server, authori
             }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
+            show_log_in_console("errorThrown");
             show_log_in_console(errorThrown);
             if(errorThrown == "Unauthorized"){
                 user_token_is_no_longer_valid();
