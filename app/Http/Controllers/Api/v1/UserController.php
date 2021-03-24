@@ -1111,13 +1111,16 @@ public function delete_article(Request $request)
     //$article = Article::find($request->article_id);
 
 
+    /*
     $article = DB::table('articles')
     ->select('articles.*')
     ->where('article_title', $request->article_title)
     ->orderBy("created_at", "desc")
     ->limit(1)
     ->get();
+    */
 
+    echo "request->article_title: " . $request->article_title;
     $article = Article::where('article_title', 'like', $request->article_title . '%')->get();
     var_dump($article);
 
