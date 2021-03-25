@@ -11,12 +11,15 @@
 
 
 
+
 ### DOWNLOAD ON APPLE APP STORE
-```
-https://apps.apple.com/vg/app/the-glory-hub/id1557614523
-```
+- <a href="https://apps.apple.com/vg/app/the-glory-hub/id1557614523" target="_blank">https://apps.apple.com/vg/app/the-glory-hub/id1557614523</a>
 
 ### DOWNLOAD ON GOOGLE PLAYSTORE
-```
-https://play.google.com/store/apps/details?id=org.christecclesia.pjdigitalpool&hl=en_AU
-```
+- <a href="https://play.google.com/store/apps/details?id=org.christecclesia.pjdigitalpool&hl=en_AU" target="_blank">https://play.google.com/store/apps/details?id=org.christecclesia.pjdigitalpool&hl=en_AU</a>
+
+
+### Author
+
+* **Dankyi Anno Kwaku**
+
