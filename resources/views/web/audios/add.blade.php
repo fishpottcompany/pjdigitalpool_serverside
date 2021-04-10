@@ -29,6 +29,13 @@ $active_page = "Audios";
                             <form id="form"  enctype="multipart/form-data">
 
                                 <div class="form-group">
+                                    <label for="audio_is_hog">Is Audio A Herald Of Glory</label>
+                                    <select type="text" required id="audio_is_hog" name="audio_is_hog" class="form-control">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="audio_name">Audio Title</label>
                                     <input type="text" maxlength="45" required id="audio_name" name="audio_name" class="form-control" placeholder="Enter Audio Title">
                                 </div>

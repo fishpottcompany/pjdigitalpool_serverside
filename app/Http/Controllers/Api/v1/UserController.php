@@ -115,8 +115,13 @@ class UserController extends Controller
             $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
         }
     
+        $where_array = array(
+            ['audio_is_hog', '=',  1],
+        ); 
+
         $audios = DB::table('audio')
         ->select('audio.*')
+        ->where($where_array)
         ->orderBy("audio_id", "desc")
         ->simplePaginate(1);
      
@@ -205,8 +210,13 @@ class UserController extends Controller
             $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
         }
     
+        $where_array = array(
+            ['audio_is_hog', '=',  1],
+        ); 
+
         $audios = DB::table('audio')
         ->select('audio.*')
+        ->where($where_array)
         ->orderBy("audio_id", "desc")
         ->simplePaginate(1);
      
@@ -491,7 +501,8 @@ public function add_audio(Request $request)
         "audio_name" => "bail|required|max:45",
         "audio_description" => "bail|required",
         "audio_image" => "bail|required",
-        "audio_mp3" => "bail|required"
+        "audio_mp3" => "bail|required",
+        "audio_is_hog" => "bail|required"
     ]);
     
     
@@ -549,12 +560,13 @@ public function add_audio(Request $request)
 
     $request->file('audio_image')->move($img_path, $img_ext);
     $request->file('audio_mp3')->move($audio_path, $audio_ext);
-
+    
     $audio = new Audio();
     $audio->audio_name = $validatedData["audio_name"]; 
     $audio->audio_description = $validatedData["audio_description"];
     $audio->audio_image = "/uploads/images/" . $img_ext;
     $audio->audio_mp3 = "/uploads/audios/" . $audio_ext;
+    $audio->audio_is_hog = intval($validatedData["audio_is_hog"]);
     $audio->user_id = auth()->user()->user_id;
     $audio->save();
 
@@ -1264,8 +1276,13 @@ public function get_dashboard(Request $request)
         $videos[$i]->video_mp4 = URL::to('/') . $videos[$i]->video_mp4;
     }
 
+    $where_array = array(
+        ['audio_is_hog', '=',  1],
+    ); 
+
     $audios = DB::table('audio')
     ->select('audio.*')
+    ->where($where_array)
     ->orderBy("audio_id", "desc")
     ->simplePaginate(1);
  

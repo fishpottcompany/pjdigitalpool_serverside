@@ -20,6 +20,7 @@ class CreateAudioTable extends Migration
             $table->longText('audio_description');
             $table->longText('audio_image');
             $table->longText('audio_mp3');
+            $table->boolean('audio_is_hog');
             $table->timestamps();
         });
 
