@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\v1;
 
+use App\Models\v1\Hog;
 use App\Models\v1\User;
 use App\Models\v1\Audio;
 use App\Models\v1\Video;
@@ -10,11 +11,11 @@ use App\Models\v1\Message;
 use App\Mail\ResetcodeMail;
 use App\Models\v1\Resetcode;
 use Illuminate\Http\Request;
+use App\Models\v1\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use App\Mail\TheGloryHubMessageMail;
-use App\Models\v1\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -1164,7 +1165,7 @@ public function delete_article(Request $request)
         }
 
         return response(["status" => "success", "message" => "Operation successful", "data" => $articles]);
-    }
+}
 
 public function update_notice(Request $request)
 {
@@ -1458,6 +1459,53 @@ curl_close( $ch );
 //echo $result . "\n\n";
 
 }
+
+public function add_impact_train(Request $request)
+{
+
+    if (!Auth::guard('api')->check()) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (!$request->user()->tokenCan('do_admin_things')) {
+        return response(["status" => "fail", "message" => "Permission Denied. Please log out and login again"]);
+    }
+
+    if (auth()->user()->user_flagged) {
+        $request->user()->token()->revoke();
+        return response(["status" => "fail", "message" => "Account access restricted"]);
+    }
+
+    $validatedData = $request->validate([
+        "article_pdf" => "bail|required",
+        "user_pin" => "bail|required|min:4|max:8",
+    ]);
+
+    if(!$request->hasFile('article_pdf')) {
+        return response(["status" => "fail", "message" => "PDF not found"]);
+    }
+
+
+    if(!$request->file('article_pdf')->isValid()) {
+        return response(["status" => "fail", "message" => "PDF not valid"]);
+    }
+
+    $img_path = public_path() . '/uploads/pdfs/';
+    
+    $img_ext = "hog.pdf";
+
+    $request->file('article_pdf')->move($img_path, $img_ext);
+
+    $article = new Hog();
+    $article->hog_file = "/uploads/pdfs/" . $img_ext;
+    $article->user_id = auth()->user()->user_id;
+    $article->save();
+
+    $this->send_fcm_notification("New HOG", "Added Successfully", "/topics/ALPHA", "ALPHA");
+    return response(["status" => "success", "message" => "HOG added successsfully."]);
+
+}
+
 
 
 }
