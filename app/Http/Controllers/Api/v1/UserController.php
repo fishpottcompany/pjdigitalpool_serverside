@@ -1501,7 +1501,7 @@ public function add_impact_train(Request $request)
     $article->user_id = auth()->user()->user_id;
     $article->save();
 
-    $this->send_fcm_notification("New HOG", "Added Successfully", "/topics/ALPHA", "ALPHA");
+    $this->send_fcm_notification("New Herald Of Glory", "Added Successfully", "/topics/ALPHA", "ALPHA");
     return response(["status" => "success", "message" => "HOG added successsfully."]);
 
 }

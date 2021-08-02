@@ -89,7 +89,7 @@
                                 </ul>
                             </li>
                             <li class="treeview <?php if(isset($active_page) && $active_page == 'Hog'){ echo 'active'; } ?>">
-                                <a href="javascript:void(0)"><i class="fa fa-file-video-o" style="color: black;"></i> <span>HOG</span></a>
+                                <a href="javascript:void(0)"><i class="fa fa-file" style="color: black;"></i> <span>HOG</span></a>
                                 <ul class="treeview-menu">
                                     <li><a href="<?php echo url('/'); ?>/admin/hog/add">Add</a></li>
                                 </ul>

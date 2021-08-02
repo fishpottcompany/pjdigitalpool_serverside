@@ -5,8 +5,8 @@
 ****************************************/
 var show_logging_in_console = "true"
 
-var hostweb = "http://144.202.76.74";
-//var hostweb = "http://pjdigitalpool";
+//var hostweb = "http://144.202.76.74";
+var hostweb = "http://pjdigitalpool";
 
 // LOGIN PAGE URL
 var web_login_url = `${hostweb}/admin/login`;
@@ -22,8 +22,8 @@ var web_home_url = `${hostweb}/admin/users/list`;
 
 ****************************************/
 
-var host_api = "http://144.202.76.74";
-//var host_api = "http://pjdigitalpool";
+//var host_api = "http://144.202.76.74";
+var host_api = "http://pjdigitalpool";
 
 // LOGIN API URL
 var api_admin_login_url = `${host_api}/api/v1/member/login`;
@@ -63,10 +63,10 @@ var api_payments_list_url =  `${host_api}/api/v1/admin/payment/list`;
 // ADD AUDIO
 var api_update_notice_url =  `${host_api}/api/v1/admin/today/notice/add`;
 
-
 var api_add_notification_url =  `${host_api}/api/v1/admin/notifications/send`;
 
-
+// ADD HOG
+var api_add_hog_url =  `${host_api}/api/v1/admin/hog/add`;
 
 
 

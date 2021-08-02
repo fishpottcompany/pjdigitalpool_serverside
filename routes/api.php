@@ -71,3 +71,5 @@ Route::middleware('auth:api')->get('/v1/admin/payment/update', 'Api\v1\UserContr
 Route::middleware('auth:api')->get('/v1/admin/payment/list', 'Api\v1\UserController@get_payments');
 
 Route::middleware('auth:api')->post('/v1/admin/notifications/send', 'Api\v1\UserController@send_notification');
+
+Route::middleware('auth:api')->post('/v1/admin/hog/add', 'Api\v1\UserController@add_impact_train');
