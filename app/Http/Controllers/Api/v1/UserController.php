@@ -134,6 +134,24 @@ class UserController extends Controller
             $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
         }
     
+        $where_array = array(
+            ['audio_is_hog', '=',  0],
+        ); 
+    
+        $latest_audios = DB::table('audio')
+        ->select('audio.*')
+        ->where($where_array)
+        ->orderBy("audio_id", "desc")
+        ->simplePaginate(1);
+     
+        for ($i=0; $i < count($latest_audios); $i++) { 
+    
+            $date = date_create($latest_audios[$i]->created_at);
+            $latest_audios[$i]->created_at = date_format($date,"M j Y");
+            $latest_audios[$i]->audio_image = URL::to('/') . $latest_audios[$i]->audio_image;
+            $latest_audios[$i]->audio_mp3 = URL::to('/') . $latest_audios[$i]->audio_mp3;
+        }
+    
 
         $return = [
             "status" => 1,
@@ -141,7 +159,8 @@ class UserController extends Controller
             "access_token" => $accessToken, 
             "data" => $notices,
             "audios" => $audios,
-            "videos" => $videos
+            "videos" => $videos,
+            "latest_audios" => $latest_audios
         ];
         return response()->json($return, 200);
         
@@ -230,13 +249,32 @@ class UserController extends Controller
         }
     
 
+        $where_array = array(
+            ['audio_is_hog', '=',  0],
+        ); 
+    
+        $latest_audios = DB::table('audio')
+        ->select('audio.*')
+        ->where($where_array)
+        ->orderBy("audio_id", "desc")
+        ->simplePaginate(1);
+     
+        for ($i=0; $i < count($latest_audios); $i++) { 
+    
+            $date = date_create($latest_audios[$i]->created_at);
+            $latest_audios[$i]->created_at = date_format($date,"M j Y");
+            $latest_audios[$i]->audio_image = URL::to('/') . $latest_audios[$i]->audio_image;
+            $latest_audios[$i]->audio_mp3 = URL::to('/') . $latest_audios[$i]->audio_mp3;
+        }
+
         $return = [
             "status" => 1,
             "user" => auth()->user(), 
             "access_token" => $accessToken, 
             "data" => $notices,
             "audios" => $audios,
-            "videos" => $videos
+            "videos" => $videos,
+            "latest_audios" => $latest_audios
         ];
         return response()->json($return, 200);
         
@@ -310,13 +348,32 @@ class UserController extends Controller
         }
     
 
+        $where_array = array(
+            ['audio_is_hog', '=',  0],
+        ); 
+    
+        $latest_audios = DB::table('audio')
+        ->select('audio.*')
+        ->where($where_array)
+        ->orderBy("audio_id", "desc")
+        ->simplePaginate(1);
+     
+        for ($i=0; $i < count($latest_audios); $i++) { 
+    
+            $date = date_create($latest_audios[$i]->created_at);
+            $latest_audios[$i]->created_at = date_format($date,"M j Y");
+            $latest_audios[$i]->audio_image = URL::to('/') . $latest_audios[$i]->audio_image;
+            $latest_audios[$i]->audio_mp3 = URL::to('/') . $latest_audios[$i]->audio_mp3;
+        }
+
         $return = [
             "status" => 1,
             "user" => auth()->user(), 
             "access_token" => $accessToken, 
             "data" => $notices,
             "audios" => $audios,
-            "videos" => $videos
+            "videos" => $videos,
+            "latest_audios" => $latest_audios
         ];
         return response()->json($return, 200);
         
@@ -1295,7 +1352,25 @@ public function get_dashboard(Request $request)
         $audios[$i]->audio_mp3 = URL::to('/') . $audios[$i]->audio_mp3;
     }
 
-    return response(["status" => "success", "message" => "Operation successful", "data" => $notices, "audios" => $audios, "videos" => $videos]);
+    $where_array = array(
+        ['audio_is_hog', '=',  0],
+    ); 
+
+    $latest_audios = DB::table('audio')
+    ->select('audio.*')
+    ->where($where_array)
+    ->orderBy("audio_id", "desc")
+    ->simplePaginate(1);
+ 
+    for ($i=0; $i < count($latest_audios); $i++) { 
+
+        $date = date_create($latest_audios[$i]->created_at);
+        $latest_audios[$i]->created_at = date_format($date,"M j Y");
+        $latest_audios[$i]->audio_image = URL::to('/') . $latest_audios[$i]->audio_image;
+        $latest_audios[$i]->audio_mp3 = URL::to('/') . $latest_audios[$i]->audio_mp3;
+    }
+
+    return response(["status" => "success", "message" => "Operation successful", "data" => $notices, "audios" => $audios, "videos" => $videos, "latest_audios" => $latest_audios]);
 }
 
 /*
