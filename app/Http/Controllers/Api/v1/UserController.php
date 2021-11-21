@@ -1412,8 +1412,8 @@ public function get_transaction_id(Request $request)
         "status" => "success", 
         "message" => $ref_num, 
         "app_user" => "caw5fc4efa195d0c", 
-        "app_key" => "ZTI0ZTBiMWQ5YWQxMGJmZTE3NTQ0OWE0NTg3OWRkZGU=", 
-        "merchant_id" => "eaef24e8-13e2-11e9-b63f-f23c9170642f"
+        "app_key" => "NWEyOGYyNWY1N2M5MzU3ZTAyZDk3MTI4ZmNkYzZlMTM=", 
+        "merchant_id" => "TTM-00004771"
         ]);
         
         // "merchant_id" => "tk_eaefc074-13e2-11e9-b63f-f23c9170642f"
