@@ -20,7 +20,7 @@ $active_page = "Users";
                             <div class="col-md-12 mb-30">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h6 class="card-title">Users<span style="color: rgb(231, 191, 31);" id="user_count"></span></h6>
+                                        <h6 class="card-title">--Users<span style="color: rgb(231, 191, 31);" id="user_count"></span></h6>
                                         <div class="d-flex justify-content-center">
                                             <div id="loader" class="customloader"></div>
                                         </div> 
