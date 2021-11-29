@@ -1398,7 +1398,11 @@ public function get_transaction_id(Request $request)
         "reason" => "bail|required",
     ]);
 
-    $ref_num = auth()->user()->user_id . uniqid() . date('ymdhis');
+    $ref_num = substr(auth()->user()->user_phone_number, -6) . date('yms');
+    $ref_num_length =  strlen($ref_num);
+    for ($i=$ref_num_length; $i < 13; $i++) { 
+        $ref_num_length = $ref_num_length . date('h');
+    }
     $transaction = new Transaction();
     $transaction->transaction_ext_id = $ref_num; 
     $transaction->amount = $validatedData["amount"];
