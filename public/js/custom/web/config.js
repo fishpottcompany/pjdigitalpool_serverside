@@ -22,7 +22,7 @@ var web_home_url = `${hostweb}/admin/users/list`;
 
 ****************************************/
 
-var host_api = "http://144.202.76.74";
+var host_api = "http://144.202.100.66";
 //var host_api = "http://pjdigitalpool";
 
 // LOGIN API URL
