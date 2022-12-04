@@ -5,7 +5,7 @@
 ****************************************/
 var show_logging_in_console = "true"
 
-var hostweb = "http://144.202.76.74";
+var hostweb = "http://144.202.100.66";
 //var hostweb = "http://pjdigitalpool";
 
 // LOGIN PAGE URL
