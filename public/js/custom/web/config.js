@@ -5,7 +5,7 @@
 ****************************************/
 var show_logging_in_console = "true"
 
-var hostweb = "http://144.202.100.66";
+var hostweb = "https://thegloryhub.fishpott.com";
 //var hostweb = "http://pjdigitalpool";
 
 // LOGIN PAGE URL
@@ -22,7 +22,7 @@ var web_home_url = `${hostweb}/admin/users/list`;
 
 ****************************************/
 
-var host_api = "http://144.202.100.66";
+var host_api = "https://thegloryhub.fishpott.com";
 //var host_api = "http://pjdigitalpool";
 
 // LOGIN API URL
